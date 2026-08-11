@@ -1,0 +1,5 @@
+if(USE_NNUE)
+    add_subdirectory(nnue)
+else()
+    add_subdirectory(hce)
+endif()

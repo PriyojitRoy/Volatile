@@ -1,0 +1,5 @@
+add_subdirectory(core)
+add_subdirectory(eval)
+add_subdirectory(search)
+add_subdirectory(uci)
+add_subdirectory(fathom)
