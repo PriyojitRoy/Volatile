@@ -1,6 +1,12 @@
 # Volatile - Agent Guidelines & Codebase Overview
 
-Welcome! This file provides a low-token summary of the `Volatile` repository architecture. Read this file to understand the system quickly without needing to grep or list directories extensively.
+Welcome! This file is the central hub for AI agents and human contributors working on the `Volatile` repository. To keep information logically grouped and token-efficient, the documentation is split across several files. 
+
+## Documentation Map
+Before diving into code, make sure you are aware of the following documents:
+- **[README.md](../README.md):** The main entry point covering engine features, build instructions, and contribution rules.
+- **[ARCHITECTURE.md](ARCHITECTURE.md):** A highly detailed breakdown of the engine's design, specifically how the core, evaluation, and search modules interact across the HCE and NNUE backends.
+- **[CONTRIBUTION_SCOPE.md](CONTRIBUTION_SCOPE.md):** A detailed tracker of undone work, incomplete features, and open tasks (like NNUE training, MCTS, and testing). Check this to know what needs to be worked on!
 
 ## High-Level Architecture
 This chess engine is written in modern C++ and supports two distinct evaluation backends: 
@@ -53,3 +59,15 @@ make -j$(nproc)
 - Prioritize updating the appropriate `CMakeLists.txt` file when adding new `.cpp` files.
 - Never use `static` for constants that need external linkage; use `constexpr` in header files instead.
 - Preserve existing formatting and avoid changing working logic inside backend-specific folders unless requested.
+
+## Contribution Guidelines (For Users and AI Agents)
+
+We welcome contributions of all sizes! To maintain a high-quality, maintainable, and high-performance codebase, all contributors (both human and AI) must adhere to the following rules:
+
+1. **Proper Abstraction & SOLID Principles:** Everything must be properly abstracted. Leverage SOLID design patterns. In C++, prefer stack allocation and RAII over manual memory management to guarantee exception safety and clear resource ownership.
+2. **File Size Limits:** No file should exceed 700 lines of code. If a file grows larger, refactor and split it into smaller, focused modules to keep the code clean and maintainable, unless splitting is strictly unwanted due to architecture.
+3. **Extend AI Capabilities:** You can choose to add new skills in the `.agent/` directory that you think AI agents will find useful for future workflows.
+4. **Single Commit Policy:** All changes for a particular task must ultimately be in one commit. Splitting into multiple commits during development is fine, but you must squash them into a single, cohesive commit after review and before merging.
+5. **Discuss Before Implementing:** Always propose what you wish to improve via a discussion or issue first. This ensures no one else is already working on it and aligns with the project's goals.
+6. **Zero Flaw Tolerance:** Your contribution, no matter how small, is always welcomed, but it must be flawless..
+7. **Dual Build Verification:** Because Volatile supports both Hand-Crafted Evaluation (HCE) and NNUE backends, you must build and test your changes with both `USE_NNUE=OFF` and `USE_NNUE=ON` to ensure no build configuration is broken.
