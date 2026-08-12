@@ -14,8 +14,23 @@ namespace ChessCore {
         entries.clear();
 
         for (const std::string& filename : filenames) {
-            std::ifstream file("data/books/" + filename, std::ios::binary);
-            if (!file.is_open()) {
+            std::ifstream file;
+            std::vector<std::string> searchPaths = {
+                "data/books/",
+                "../data/books/",
+                "../../data/books/"
+            };
+            
+            bool opened = false;
+            for (const auto& path : searchPaths) {
+                file.open(path + filename, std::ios::binary);
+                if (file.is_open()) {
+                    opened = true;
+                    break;
+                }
+            }
+
+            if (!opened) {
                 std::cout << "Warning: Could not open book file " << filename << std::endl;
                 continue;
             }

@@ -11,10 +11,23 @@ namespace ChessCore {
     bool Tablebase::loaded = false;
 
     void Tablebase::init(const std::string& path) {
-        if (tb_init(path.c_str())) {
-            loaded = true;
-            std::cout << "info string Syzygy tablebases loaded successfully from " << path << std::endl;
-        } else {
+        std::vector<std::string> searchPaths = {
+            path,
+            "../" + path,
+            "../../" + path
+        };
+
+        bool success = false;
+        for (const auto& sp : searchPaths) {
+            if (tb_init(sp.c_str()) && TB_LARGEST > 0) {
+                loaded = true;
+                std::cout << "info string Syzygy tablebases loaded successfully from " << sp << std::endl;
+                success = true;
+                break;
+            }
+        }
+
+        if (!success) {
             std::cout << "info string Failed to load Syzygy tablebases." << std::endl;
         }
     }

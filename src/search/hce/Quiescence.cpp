@@ -23,7 +23,7 @@ namespace ChessCore {
 
 
 
-    int Search::quiescence(Board& board, int alpha, int beta, Stack* ss) {
+    int Search::quiescence(Board& board, int alpha, int beta, int ply, Stack* ss) {
         nodesSearched++; 
         if (!isPondering && ((nodesSearched & NODE_POLLING_MASK) == 0)) {
             auto now = std::chrono::high_resolution_clock::now();
@@ -77,7 +77,7 @@ namespace ChessCore {
             legalMoves++;
             ss->currentMove = m;
 
-            int score = -quiescence(board, -beta, -alpha, ss + 1);
+            int score = -quiescence(board, -beta, -alpha, ply + 1, ss + 1);
             board.unmakeMove(m);
 
             if (score > bestScore) {
@@ -87,7 +87,7 @@ namespace ChessCore {
             }
         }
         
-        if (inCheck && legalMoves == 0) return -MATE_SCORE;
+        if (inCheck && legalMoves == 0) return -MATE_SCORE + ply;
         
         return bestScore;
     }

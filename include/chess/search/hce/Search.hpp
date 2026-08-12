@@ -114,7 +114,7 @@ void getCorrHistKeys(const Board& board, int& pawnK, int& nonPawnK, int& minorK,
 
     private:
         int negamax(Board& board, int depth, int alpha, int beta, int ply, Stack* ss, bool isPV);
-        int quiescence(Board& board, int alpha, int beta, Stack* ss);
+        int quiescence(Board& board, int alpha, int beta, int ply, Stack* ss);
         int see(Board& board, Move move);
         void orderMoves(Board& board, MoveList& moves, Stack* ss, int ply = 0);
 

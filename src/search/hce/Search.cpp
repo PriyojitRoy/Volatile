@@ -313,7 +313,7 @@ namespace ChessCore {
             }
         }
 
-        if (depth <= 0) return quiescence(board, alpha, beta, ss);
+        if (depth <= 0) return quiescence(board, alpha, beta, ply, ss);
 
         int pawnK, nonPawnK, minorK, majorK;
         getCorrHistKeys(board, pawnK, nonPawnK, minorK, majorK);
@@ -351,7 +351,7 @@ namespace ChessCore {
         if (depth <= RAZOR_MIN_DEPTH && !isPV && !inCheck && !isZugzwangRisk && std::abs(alpha) < SCORE_MATE_BOUND) {
             int razorMargin = RAZOR_BASE_MARGIN + (RAZOR_DEPTH_MULTIPLIER * depth * depth); 
             if (eval + razorMargin <= alpha) {
-                int qsScore = quiescence(board, alpha, beta, ss);
+                int qsScore = quiescence(board, alpha, beta, ply, ss);
                 if (qsScore <= alpha) return qsScore;
             }
         }
