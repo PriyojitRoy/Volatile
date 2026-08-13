@@ -53,7 +53,7 @@ void Board::initKeys() {
         
         
         history.clear();
-        accumulator.init(Evaluator::getBiases()); 
+        accumulator.init(Evaluate::getBiases()); 
         initKeys();
     }
 

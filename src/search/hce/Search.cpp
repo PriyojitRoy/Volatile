@@ -10,8 +10,8 @@
 #include "chess/eval/nnue/Network.hpp"
 namespace ChessCore { using EvalBackend = Network; }
 #else
-#include "chess/eval/hce/Evaluator.hpp"
-namespace ChessCore { using EvalBackend = Evaluator; }
+#include "chess/eval/hce/Evaluate.hpp"
+namespace ChessCore { using EvalBackend = Evaluate; }
 #endif
 
 namespace ChessCore {

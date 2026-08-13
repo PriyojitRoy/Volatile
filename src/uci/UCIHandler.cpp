@@ -11,7 +11,7 @@
 #ifdef USE_NNUE
 #include "chess/eval/nnue/Network.hpp"
 #else
-#include "chess/eval/hce/Evaluator.hpp"
+#include "chess/eval/hce/Evaluate.hpp"
 #endif
 
 namespace ChessCore {
@@ -112,7 +112,7 @@ namespace ChessCore {
 #ifdef USE_NNUE
                 int staticEval = Network::evaluate(board);
 #else
-                int staticEval = Evaluator::evaluate(board);
+                int staticEval = Evaluate::evaluate(board);
 #endif
                 std::cout << "info string Static Evaluation: " << staticEval << " cp" << std::endl;
             }

@@ -1,4 +1,4 @@
-#include "chess/eval/hce/Evaluator.hpp"
+#include "chess/eval/hce/Evaluate.hpp"
 #include "chess/core/Bitboard.hpp"
 #include "chess/core/Board.hpp"
 #include "chess/search/hce/PawnTable.hpp"
@@ -142,11 +142,11 @@ namespace ChessCore {
     const int EVAL_HASH_SIZE = 1048576;
     EvalEntry evalTable[EVAL_HASH_SIZE] = {};
 
-    bool Evaluator::load(const std::string&) { return true; }
-    const std::vector<float>& Evaluator::getBiases() { static std::vector<float> v; return v; }
-    void Evaluator::computeLayer(float*, float*, float*, float*, int, int, bool) {}
+    bool Evaluate::load(const std::string&) { return true; }
+    const std::vector<float>& Evaluate::getBiases() { static std::vector<float> v; return v; }
+    void Evaluate::computeLayer(float*, float*, float*, float*, int, int, bool) {}
 
-    void Evaluator::evaluatePawnStructure(const Board& board, int32_t& pawnMGDiff, int32_t& pawnEGDiff) {
+    void Evaluate::evaluatePawnStructure(const Board& board, int32_t& pawnMGDiff, int32_t& pawnEGDiff) {
         int packedScore;
         if (g_pawnTable.probe(board.pawnKey, packedScore)) {
             pawnMGDiff = unpack_mg(packedScore);
@@ -193,7 +193,7 @@ namespace ChessCore {
         g_pawnTable.store(board.pawnKey, S(pawnMGDiff, pawnEGDiff));
     }
 
-    void Evaluator::evaluatePieces(const Board& board, int32_t mg[2], int32_t eg[2]) {
+    void Evaluate::evaluatePieces(const Board& board, int32_t mg[2], int32_t eg[2]) {
         uint64_t occ = board.getAllPieces();
         uint64_t pieces[2][6];
         for (int c = White; c <= Black; c++) {
@@ -279,7 +279,7 @@ namespace ChessCore {
         if (rooksSemiOpen[Black] >= 2) { mg[Black] += unpack_mg(rook_semi_open[1]); eg[Black] += unpack_eg(rook_semi_open[1]); }
     }
 
-    int Evaluator::evaluate(const Board& board) {
+    int Evaluate::evaluate(const Board& board) {
         uint64_t key = board.zorbitKey;
         int idx = key % EVAL_HASH_SIZE;
         if (evalTable[idx].key == key) return evalTable[idx].score;
@@ -304,7 +304,7 @@ namespace ChessCore {
         return finalScore;
     }
 
-    int Evaluator::lazyEvaluate(const Board& board) {
+    int Evaluate::lazyEvaluate(const Board& board) {
         int32_t mg[2] = { board.evalState.mg[White], board.evalState.mg[Black] };
         int32_t eg[2] = { board.evalState.eg[White], board.evalState.eg[Black] };
         int phase = board.evalState.phase;

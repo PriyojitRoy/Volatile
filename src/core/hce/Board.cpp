@@ -2,7 +2,7 @@
 #include "chess/core/Constants.hpp"
 #include "chess/core/Move.hpp"
 #include "chess/core/Bitboard.hpp"
-#include "chess/eval/hce/Evaluator.hpp"
+#include "chess/eval/hce/Evaluate.hpp"
 //#define DEBUG_HASH
 #define S(mg, eg) ((int32_t)(((uint32_t)(uint16_t)(eg) << 16) | (uint16_t)(mg)))
 inline int32_t unpack_mg(int32_t s) { return (int16_t)(s & 0xFFFF); }
@@ -61,7 +61,7 @@ void Board::reset() {
         evalState.eg[White] = evalState.eg[Black] = 0;
         evalState.phase = 0;
         history.clear();
-        accumulator.init(Evaluator::getBiases()); 
+        accumulator.init(Evaluate::getBiases()); 
         initKeys();
     }
 

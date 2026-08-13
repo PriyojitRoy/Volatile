@@ -6,7 +6,7 @@
 
 namespace ChessCore {
     
-    class Evaluator {
+    class Evaluate {
     public:
         static int evaluate(const Board& board);
         static int lazyEvaluate(const Board& board);
