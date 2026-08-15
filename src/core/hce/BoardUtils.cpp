@@ -1,14 +1,14 @@
-#include "chess/core/Board.hpp"
-#include "chess/core/Constants.hpp"
-#include "chess/core/Move.hpp"
-#include "chess/core/Bitboard.hpp"
-#include "chess/eval/hce/Evaluate.hpp"
+#include "core/Board.hpp"
+#include "core/Constants.hpp"
+#include "core/Move.hpp"
+#include "core/Bitboard.hpp"
+#include "eval/hce/Evaluate.hpp"
 //#define DEBUG_HASH
 #define S(mg, eg) ((int32_t)(((uint32_t)(uint16_t)(eg) << 16) | (uint16_t)(mg)))
 inline int32_t unpack_mg(int32_t s) { return (int16_t)(s & 0xFFFF); }
 inline int32_t unpack_eg(int32_t s) { return (int16_t)((s >> 16) & 0xFFFF); }
 
-namespace ChessCore {
+namespace VEngine {
 
     extern const int32_t PieceValueMG[6];
     extern const int32_t PieceValueEG[6];

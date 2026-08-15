@@ -1,10 +1,10 @@
 #include <iostream>
 #include <string>
 #include <chrono>
-#include "chess/core/Board.hpp"
-#include "chess/core/MoveGen.hpp"
+#include "core/Board.hpp"
+#include "core/MoveGen.hpp"
 
-using namespace ChessCore;
+using namespace VEngine;
 
 uint64_t perft(Board& board, int depth) {
     if (depth == 0) return 1ULL;

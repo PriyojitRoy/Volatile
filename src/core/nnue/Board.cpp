@@ -1,9 +1,10 @@
-#include "chess/core/Board.hpp"
-#include "chess/core/Constants.hpp"
-#include "chess/core/Move.hpp"
-#include "chess/core/Bitboard.hpp"
+#include "core/Board.hpp"
+#include "core/Constants.hpp"
+#include "core/Move.hpp"
+#include "core/Bitboard.hpp"
+#include "eval/nnue/Network.hpp"
 //#define DEBUG_HASH
-namespace ChessCore {
+namespace VEngine {
 
     uint64_t ZOBRIST_PIECES[6][2][64];
     uint64_t ZOBRIST_SIDE;
@@ -53,7 +54,7 @@ void Board::initKeys() {
         
         
         history.clear();
-        accumulator.init(Evaluate::getBiases()); 
+        accumulator.init(Network::getBiases()); 
         initKeys();
     }
 
@@ -191,7 +192,7 @@ void Board::parseFen(const std::string& fen) {
                     int sq = Bitboard::getLsb(bb);
                     Bitboard::popLsb(bb);
                 
-                    int tableSq = (c == White) ? (sq ^ 56) : sq;
+                    [[maybe_unused]] int tableSq = (c == White) ? (sq ^ 56) : sq;
                 
                     
                     

@@ -1,7 +1,7 @@
 
-#include "chess/core/Bitboard.hpp"
+#include "core/Bitboard.hpp"
 
-namespace ChessCore {
+namespace VEngine {
 
     uint64_t Bitboard::rookTable[64][4096];
     uint64_t Bitboard::bishopTable[64][512];

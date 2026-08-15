@@ -1,8 +1,8 @@
-#include "chess/core/MoveGen.hpp"
-#include "chess/core/Bitboard.hpp"
-#include "chess/core/Constants.hpp"
+#include "core/MoveGen.hpp"
+#include "core/Bitboard.hpp"
+#include "core/Constants.hpp"
 
-namespace ChessCore {
+namespace VEngine {
 
     void MoveGen::generateAllMoves(const Board& board, MoveList& moveList) {
         moveList.reset();

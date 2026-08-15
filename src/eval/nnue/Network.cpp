@@ -1,6 +1,6 @@
-#include "chess/eval/nnue/Network.hpp"
+#include "eval/nnue/Network.hpp"
 
-namespace ChessCore {
+namespace VEngine {
 
     int Network::evaluate(const Board& board) {
         // TODO: Implement NNUE evaluation

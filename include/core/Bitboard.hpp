@@ -1,10 +1,10 @@
 #ifndef CHESS_BITBOARD_H
 #define CHESS_BITBOARD_H
 
-#include "chess/common.h"
-#include "chess/core/Constants.hpp"
+#include "common.h"
+#include "core/Constants.hpp"
 
-namespace ChessCore {
+namespace VEngine {
 
 
 

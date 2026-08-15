@@ -1,7 +1,7 @@
-#include "chess/eval/nnue/Accumulator.hpp"
+#include "eval/nnue/Accumulator.hpp"
 #include <cstring>
 
-namespace ChessCore {
+namespace VEngine {
     Accumulator::Accumulator() {
         white.fill(0.0f);
         black.fill(0.0f);

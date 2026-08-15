@@ -1,7 +1,7 @@
-#include "chess/core/Move.hpp"
-#include "chess/core/Constants.hpp"
+#include "core/Move.hpp"
+#include "core/Constants.hpp"
 
-namespace ChessCore {
+namespace VEngine {
 
     std::string squareToString(int sq) {
         if (sq < 0 || sq > 63) return "-";

@@ -3,10 +3,10 @@
 
 #include <string>
 #include <vector>
-#include "chess/core/Board.hpp"
-#include "chess/eval/nnue/Accumulator.hpp"
+#include "core/Board.hpp"
+#include "eval/nnue/Accumulator.hpp"
 
-namespace ChessCore {
+namespace VEngine {
     
     class Network {
     public:

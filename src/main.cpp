@@ -1,11 +1,11 @@
-#include "chess/uci/UCIHandler.hpp"
-#include "chess/core/Board.hpp"
-#include "chess/search/hce/TT.hpp"
-#include "chess/search/hce/OpeningBook.hpp"
-#include "chess/search/hce/Datagen.hpp"
+#include "uci/UCIHandler.hpp"
+#include "core/Board.hpp"
+#include "search/TT.hpp"
+#include "search/OpeningBook.hpp"
+#include "search/hce/Datagen.hpp"
 
 int main(int argc, char* argv[]) {
-    ChessCore::Board board;
+    VEngine::Board board;
     board.initZobrist();
 
     if (argc > 1) {
@@ -27,7 +27,7 @@ int main(int argc, char* argv[]) {
             std::cout << "Output File  : " << outputFile << std::endl;
             std::cout << "Number of Games : " << numGames << std::endl;
 
-            ChessCore::Datagen::generateData(numGames, epdFile, outputFile);
+            VEngine::Datagen::generateData(numGames, epdFile, outputFile);
             
             return 0; 
         }
@@ -43,23 +43,24 @@ int main(int argc, char* argv[]) {
             std::cout << "--- Starting Native SPSA Tuning ---" << std::endl;
             std::cout << "Opening Book : " << epdFile << std::endl;
 
-            ChessCore::Datagen::runSPSATuner(epdFile);
+            VEngine::Datagen::runSPSATuner(epdFile);
             
             return 0; 
         }
     }
 
-    ChessCore::UCIHandler handler;
+    VEngine::UCIHandler handler;
 
     std::vector<std::string> myBooks = {
-        "gm2001.bin",
-        "rodent.bin",
-        "Titans.bin",
         "Human.bin",
-        "komodo.bin"
+        "gm2001.bin",
+        "komodo.bin",
+        "Perfect2021.bin",
+        "rodent.bin",
+        "Titans.bin"
     };
 
-    if (ChessCore::OpeningBook::load(myBooks)) {
+    if (VEngine::OpeningBook::load(myBooks)) {
         std::cout << "Engine ready with combined opening knowledge!" << std::endl;
     } else {
         std::cout << "Playing without an opening book." << std::endl;

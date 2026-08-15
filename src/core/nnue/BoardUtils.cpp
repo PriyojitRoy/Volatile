@@ -1,9 +1,9 @@
-#include "chess/core/Board.hpp"
-#include "chess/core/Constants.hpp"
-#include "chess/core/Move.hpp"
-#include "chess/core/Bitboard.hpp"
+#include "core/Board.hpp"
+#include "core/Constants.hpp"
+#include "core/Move.hpp"
+#include "core/Bitboard.hpp"
 //#define DEBUG_HASH
-namespace ChessCore {
+namespace VEngine {
 
     extern uint64_t ZOBRIST_PIECES[6][2][64];
     extern uint64_t ZOBRIST_SIDE;

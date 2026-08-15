@@ -4,7 +4,7 @@
 #include <vector>
 #include <cstdint>
 
-namespace ChessCore {
+namespace VEngine {
 
     constexpr int NetworkHiddenSize = 256; 
 

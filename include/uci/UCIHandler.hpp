@@ -4,17 +4,17 @@
 #include <thread>
 #include <string>
 #include <vector>
-#include "chess/core/Board.hpp"
-#include "chess/core/Move.hpp"
+#include "core/Board.hpp"
+#include "core/Move.hpp"
 
 // Include the appropriate search backend
 #ifdef USE_NNUE
-#include "chess/search/nnue/MCTS.hpp"
+#include "search/nnue/MCTS.hpp"
 #else
-#include "chess/search/hce/Search.hpp"
+#include "search/hce/Search.hpp"
 #endif
 
-namespace ChessCore {
+namespace VEngine {
 
     class UCIHandler {
     public:

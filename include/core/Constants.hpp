@@ -1,9 +1,9 @@
 #ifndef CHESS_CONSTANTS_H
 #define CHESS_CONSTANTS_H
 
-#include "chess/common.h"
+#include "common.h"
 
-namespace ChessCore {
+namespace VEngine {
     extern const int32_t PSQT[6][64];
     
     enum Color {

@@ -1,20 +1,20 @@
-#include "chess/uci/UCIHandler.hpp"
-#include "chess/core/Bitboard.hpp"
-#include "chess/core/Constants.hpp"
-#include "chess/search/hce/TT.hpp"
-#include "chess/search/hce/TimeManager.hpp"
-#include "chess/search/hce/Tablebase.hpp"
-#include "chess/core/MoveGen.hpp"
-#include "chess/core/Move.hpp"
+#include "uci/UCIHandler.hpp"
+#include "core/Bitboard.hpp"
+#include "core/Constants.hpp"
+#include "search/TT.hpp"
+#include "search/hce/TimeManager.hpp"
+#include "search/Tablebase.hpp"
+#include "core/MoveGen.hpp"
+#include "core/Move.hpp"
 
 // Evaluation backend: USE_NNUE selects NNUE network, default is HCE
 #ifdef USE_NNUE
-#include "chess/eval/nnue/Network.hpp"
+#include "eval/nnue/Network.hpp"
 #else
-#include "chess/eval/hce/Evaluate.hpp"
+#include "eval/hce/Evaluate.hpp"
 #endif
 
-namespace ChessCore {
+namespace VEngine {
 
     TranspositionTable g_tt(64);
 

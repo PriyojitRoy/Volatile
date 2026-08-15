@@ -2,9 +2,9 @@
 #define CHESS_EVAL_HCE_EVALUATOR_H
 #include <string>
 #include <vector>
-#include "chess/core/Board.hpp"
+#include "core/Board.hpp"
 
-namespace ChessCore {
+namespace VEngine {
     
     class Evaluate {
     public:

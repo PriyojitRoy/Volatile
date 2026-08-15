@@ -1,8 +1,8 @@
 #include <iostream>
 #include <string>
-#include "chess/core/Board.hpp"
+#include "core/Board.hpp"
 
-using namespace ChessCore;
+using namespace VEngine;
 
 int main(int argc, char* argv[]) {
     Board board;

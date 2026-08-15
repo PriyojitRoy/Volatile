@@ -1,13 +1,13 @@
 #ifndef CHESS_BOARD_H
 #define CHESS_BOARD_H
 
-#include "chess/common.h"
-#include "chess/core/Bitboard.hpp"
-#include "chess/core/Move.hpp"
-#include "chess/core/Constants.hpp"
-#include "chess/eval/nnue/Accumulator.hpp"
+#include "common.h"
+#include "core/Bitboard.hpp"
+#include "core/Move.hpp"
+#include "core/Constants.hpp"
+#include "eval/nnue/Accumulator.hpp"
 
-namespace ChessCore {
+namespace VEngine {
 
 
     class Board {

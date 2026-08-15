@@ -1,9 +1,9 @@
 #ifndef CHESS_MOVE_H
 #define CHESS_MOVE_H
 
-#include "chess/common.h"
+#include "common.h"
 
-namespace ChessCore {
+namespace VEngine {
 
     enum MoveFlag : uint16_t {
         Quiet = 0,

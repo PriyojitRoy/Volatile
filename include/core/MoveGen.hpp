@@ -1,11 +1,11 @@
 #ifndef CHESS_MOVEGEN_H
 #define CHESS_MOVEGEN_H
 
-#include "chess/common.h"
-#include "chess/core/Board.hpp"
-#include "chess/core/Move.hpp"
+#include "common.h"
+#include "core/Board.hpp"
+#include "core/Move.hpp"
 
-namespace ChessCore {
+namespace VEngine {
 
     struct MoveList {
         Move moves[256];

@@ -1,9 +1,9 @@
-#include "chess/core/Board.hpp"
-#include "chess/core/Constants.hpp"
-#include "chess/core/Move.hpp"
-#include "chess/core/Bitboard.hpp"
+#include "core/Board.hpp"
+#include "core/Constants.hpp"
+#include "core/Move.hpp"
+#include "core/Bitboard.hpp"
 //#define DEBUG_HASH
-namespace ChessCore {
+namespace VEngine {
 
     extern uint64_t ZOBRIST_PIECES[6][2][64];
     extern uint64_t ZOBRIST_SIDE;
@@ -93,7 +93,7 @@ bool Board::makeMove(Move move) {
             majorKey ^= ZOBRIST_PIECES[piece][movingColor][from];
         }
 
-        int tableFrom = (movingColor == White) ? (from ^ 56) : from;
+        [[maybe_unused]] int tableFrom = (movingColor == White) ? (from ^ 56) : from;
         
         
         
@@ -104,7 +104,7 @@ bool Board::makeMove(Move move) {
         if (flags == EpCapture) {
             int capColor = 1 - movingColor;
             int capSq = (movingColor == White) ? to - 8 : to + 8;
-            int tableCap = (capColor == White) ? (capSq ^ 56) : capSq;
+            [[maybe_unused]] int tableCap = (capColor == White) ? (capSq ^ 56) : capSq;
 
             
             
@@ -119,7 +119,7 @@ bool Board::makeMove(Move move) {
         }
         else if (captured != None) {
             int capColor = 1 - movingColor;
-            int tableCap = (capColor == White) ? (to ^ 56) : to;
+            [[maybe_unused]] int tableCap = (capColor == White) ? (to ^ 56) : to;
 
             
             
@@ -160,7 +160,7 @@ bool Board::makeMove(Move move) {
             majorKey ^= ZOBRIST_PIECES[placedPiece][movingColor][to];
         }
 
-        int tableTo = (movingColor == White) ? (to ^ 56) : to;
+        [[maybe_unused]] int tableTo = (movingColor == White) ? (to ^ 56) : to;
         
         
         
@@ -175,8 +175,8 @@ bool Board::makeMove(Move move) {
                 rT = (movingColor == White) ? SqD1 : SqD8;
             }
 
-            int tableRf = (movingColor == White) ? (rF ^ 56) : rF;
-            int tableRt = (movingColor == White) ? (rT ^ 56) : rT;
+            [[maybe_unused]] int tableRf = (movingColor == White) ? (rF ^ 56) : rF;
+            [[maybe_unused]] int tableRt = (movingColor == White) ? (rT ^ 56) : rT;
 
             
             
