@@ -6,6 +6,7 @@
 #include "search/Tablebase.hpp"
 #include "core/MoveGen.hpp"
 #include "core/Move.hpp"
+#include "core/Logo.hpp"
 
 // Evaluation backend: USE_NNUE selects NNUE network, default is HCE
 #ifdef USE_NNUE
@@ -30,6 +31,10 @@ namespace VEngine {
 #endif
         
         board.parseFen(StartFen);
+
+        std::cout << VEngine::Constants::ENGINE_LOGO << std::endl;
+        std::cout << "\033[1;36mVolatile Chess Engine By Priyojit Roy\033[0m" << std::endl;
+        std::cout << "Visit the engine at: " << VEngine::Constants::ENGINE_GITHUB_LINK << std::endl;
     }
 
     void UCIHandler::loop() {
