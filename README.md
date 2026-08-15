@@ -1,7 +1,7 @@
 # Volatile Chess Engine ♟️
 
 <p align="center">
-  <img src="Volatile_logo.png" alt="Volatile Logo" width="300"/>
+  <img src="VCE_logo.png" alt="VCE Logo" width="300"/>
 </p>
 
 Welcome to **Volatile**! This is a UCI-compatible chess engine written in C++ with a strong focus on modularity and performance.
