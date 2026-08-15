@@ -1,9 +1,9 @@
 import struct
 import numpy as np
-#mport os
-#import sys
+import sys
 
-NNUE_PATH = "../../data/network-20220625.nnue"
+# Path to NNUE file should be provided via command line argument or input
+NNUE_PATH = ""
 OFFSET = 2048  
 CP_SCALE = 15000.0  
 
@@ -57,10 +57,10 @@ def get_indices(white_pieces, black_pieces, w_ksq, b_ksq, buckets):
     return get_halfkp_indices(white_pieces, black_pieces, bw, True), \
            get_halfkp_indices(black_pieces, white_pieces, bb, False)
 
-def run_eval(h1, buckets, fen):
+def run_eval(h1, buckets, fen, nnue_path):
     try:
         w_p, b_p, w_ksq, b_ksq, stm = parse_fen(fen)
-        with open(NNUE_PATH, 'rb') as f:
+        with open(nnue_path, 'rb') as f:
             f.seek(OFFSET)
             b1 = np.frombuffer(f.read(h1 * 2), dtype=np.int16).astype(np.float32)
             w1 = np.frombuffer(f.read(buckets * 768 * h1 * 2), dtype=np.int16).reshape(-1, h1).astype(np.float32)
@@ -89,6 +89,16 @@ def run_eval(h1, buckets, fen):
 
 if __name__ == "__main__":
     print("\n--- NNUE Multi-Config Verifier ---")
+    
+    if len(sys.argv) > 1:
+        NNUE_PATH = sys.argv[1]
+    else:
+        NNUE_PATH = input("Enter NNUE file path: ").strip()
+        
+    if not NNUE_PATH:
+        print("NNUE file path is required.")
+        sys.exit(1)
+
     test_fen = input("Enter FEN (or press Enter for Startpos): ").strip()
     if not test_fen: test_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
@@ -98,13 +108,13 @@ if __name__ == "__main__":
 
     for h1 in [128, 256, 512]:
         for bks in [1, 8, 16]:
-            score = run_eval(h1, bks, test_fen)
+            score = run_eval(h1, bks, test_fen, NNUE_PATH)
             if score is not None:
 
                 parts = test_fen.split()
                 parts[1] = 'b' if parts[1] == 'w' else 'w'
                 opp_fen = " ".join(parts)
-                opp_score = run_eval(h1, bks, opp_fen)
+                opp_score = run_eval(h1, bks, opp_fen, NNUE_PATH)
                 
                 sym = "OK" if abs(score + opp_score) < 0.01 else "BAD"
                 status = "DEAD" if abs(score) < 1e-7 else f"{score:+.2f}"
