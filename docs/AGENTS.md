@@ -71,3 +71,10 @@ We welcome contributions of all sizes! To maintain a high-quality, maintainable,
 5. **Discuss Before Implementing:** Always propose what you wish to improve via a discussion or issue first. This ensures no one else is already working on it and aligns with the project's goals.
 6. **Zero Flaw Tolerance:** Your contribution, no matter how small, is always welcomed, but it must be flawless..
 7. **Dual Build Verification:** Because Volatile supports both Hand-Crafted Evaluation (HCE) and NNUE backends, you must build and test your changes with both `USE_NNUE=OFF` and `USE_NNUE=ON` to ensure no build configuration is broken.
+8. **Git Commit Message Style:** All commit messages must follow the project's strict format:
+   - The first line must use the Conventional Commits format (`type: description`, e.g., `feat: add ...` or `refactor: restructure ...`).
+   - Leave an empty line after the first line.
+   - Provide a detailed bulleted list of changes using hyphens (`-`). Each bullet point should explain a specific change and its reasoning.
+   - Leave an empty line after the list.
+   - End with a `Signed-off-by: Your Name <email@example.com>` signature block.
+   - (Optional) Leave an empty line and add any closing/referencing issue tags (e.g., `Closes #7` or `Ref #2`).
