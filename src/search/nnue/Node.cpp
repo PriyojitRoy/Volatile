@@ -1,8 +1,8 @@
-#include "chess/search/nnue/Node.hpp"
+#include "search/nnue/Node.hpp"
 #include <algorithm>
 #include <limits>
 
-namespace ChessCore {
+namespace VEngine {
 
     Node::Node(Move m, Node* p) {
         move = m;

@@ -2,9 +2,9 @@
 #define CHESS_SEARCH_TIMEMANAGER_H
 #include <algorithm>
 #include <cmath>
-#include "chess/core/Constants.hpp"
+#include "core/Constants.hpp"
 
-namespace ChessCore {
+namespace VEngine {
     struct TimeAllocation {
         int optimumMs;
         int maximumMs;

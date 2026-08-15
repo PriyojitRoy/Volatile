@@ -1,11 +1,11 @@
 #ifndef CHESS_SEARCH_OPENINGBOOK_H
 #define CHESS_SEARCH_OPENINGBOOK_H
-#include "chess/core/Board.hpp"
-#include "chess/core/Move.hpp"
+#include "core/Board.hpp"
+#include "core/Move.hpp"
 #include <string>
 #include <vector>
 
-namespace ChessCore {
+namespace VEngine {
 
     struct PolyglotEntry {
         uint64_t key;

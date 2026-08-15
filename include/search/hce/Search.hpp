@@ -1,13 +1,13 @@
 #ifndef CHESS_SEARCH_SEARCH_H
 #define CHESS_SEARCH_SEARCH_H
 
-#include "chess/common.h"
-#include "chess/core/Board.hpp"
-#include "chess/core/Move.hpp"
-#include "chess/core/MoveGen.hpp"
-#include "chess/search/hce/TT.hpp"
+#include "common.h"
+#include "core/Board.hpp"
+#include "core/Move.hpp"
+#include "core/MoveGen.hpp"
+#include "search/TT.hpp"
 
-namespace ChessCore {
+namespace VEngine {
 
     // Basic Search Constants
     const int INF                       =50000;

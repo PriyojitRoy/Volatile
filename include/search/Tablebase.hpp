@@ -1,10 +1,10 @@
 #ifndef CHESS_SEARCH_TABLEBASE_H
 #define CHESS_SEARCH_TABLEBASE_H
-#include "chess/core/Board.hpp"
-#include "chess/core/Move.hpp"
+#include "core/Board.hpp"
+#include "core/Move.hpp"
 #include <string>
 
-namespace ChessCore {
+namespace VEngine {
     class Tablebase {
     private:
         static bool loaded;

@@ -1,11 +1,11 @@
 #ifndef CHESS_SEARCH_DATAGEN_H
 #define CHESS_SEARCH_DATAGEN_H
-#include "chess/core/Board.hpp"
+#include "core/Board.hpp"
 #include <string>
 #include <vector>
 #include <cstdint>
 
-namespace ChessCore {
+namespace VEngine {
 
     #pragma pack(push, 1)
     struct PackedEntry {

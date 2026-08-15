@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <vector>
 
-namespace ChessCore {
+namespace VEngine {
 
     struct PawnEntry {
         uint64_t key;     

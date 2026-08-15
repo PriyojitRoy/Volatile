@@ -1,9 +1,9 @@
 #ifndef CHESS_SEARCH_TT_H
 #define CHESS_SEARCH_TT_H
 #include <cstdint>
-#include "chess/core/Move.hpp"
+#include "core/Move.hpp"
 
-namespace ChessCore {
+namespace VEngine {
 
     enum TTNodeFlag { TT_EXACT, TT_LOWERBOUND, TT_UPPERBOUND };
 

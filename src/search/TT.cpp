@@ -1,6 +1,6 @@
-#include "chess/search/hce/TT.hpp"
+#include "search/TT.hpp"
 
-namespace ChessCore {
+namespace VEngine {
 
     TranspositionTable::TranspositionTable(unsigned long mb) {
         numEntries = (mb * 1024ULL * 1024ULL) / sizeof(TTEntry);

@@ -1,12 +1,12 @@
-#include "chess/search/hce/Datagen.hpp"
-#include "chess/search/hce/Search.hpp"
-#include "chess/core/MoveGen.hpp"
+#include "search/hce/Datagen.hpp"
+#include "search/hce/Search.hpp"
+#include "core/MoveGen.hpp"
 #include <sys/wait.h>
 #include <unistd.h>
 #include <fstream>
 #include <mutex>
 
-namespace ChessCore {
+namespace VEngine {
 
 
     std::vector<std::string> Datagen::loadEPD(const std::string& filename) {

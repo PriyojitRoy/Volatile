@@ -1,7 +1,7 @@
-#include "chess/search/nnue/MCTS.hpp"
-#include "chess/core/MoveGen.hpp"
+#include "search/nnue/MCTS.hpp"
+#include "core/MoveGen.hpp"
 
-namespace ChessCore {
+namespace VEngine {
 
     MCTS::MCTS() : nodesSearched(0), allocatedTime(0) {
     }

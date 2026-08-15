@@ -1,20 +1,20 @@
-#include "chess/search/hce/Search.hpp"
-#include "chess/core/MoveGen.hpp"
-#include "chess/search/hce/TT.hpp"
-#include "chess/core/Bitboard.hpp"
-#include "chess/search/hce/OpeningBook.hpp"
-#include "chess/search/hce/Tablebase.hpp"
+#include "search/hce/Search.hpp"
+#include "core/MoveGen.hpp"
+#include "search/TT.hpp"
+#include "core/Bitboard.hpp"
+#include "search/OpeningBook.hpp"
+#include "search/Tablebase.hpp"
 
 // Evaluation backend: compile with -DUSE_NNUE for NNUE, default is HCE
 #ifdef USE_NNUE
-#include "chess/eval/nnue/Network.hpp"
-namespace ChessCore { using EvalBackend = Network; }
+#include "eval/nnue/Network.hpp"
+namespace VEngine { using EvalBackend = Network; }
 #else
-#include "chess/eval/hce/Evaluate.hpp"
-namespace ChessCore { using EvalBackend = Evaluate; }
+#include "eval/hce/Evaluate.hpp"
+namespace VEngine { using EvalBackend = Evaluate; }
 #endif
 
-namespace ChessCore {
+namespace VEngine {
 
     extern TranspositionTable g_tt;
 

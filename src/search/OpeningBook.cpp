@@ -1,10 +1,10 @@
-#include "chess/search/hce/OpeningBook.hpp"
-#include "chess/core/Bitboard.hpp"
-#include "chess/core/MoveGen.hpp"
+#include "search/OpeningBook.hpp"
+#include "core/Bitboard.hpp"
+#include "core/MoveGen.hpp"
 #include <fstream>
 #define U64(x) x##ULL
 
-namespace ChessCore {
+namespace VEngine {
 
     bool OpeningBook::hasBook = false;
     std::vector<PolyglotEntry> OpeningBook::entries;

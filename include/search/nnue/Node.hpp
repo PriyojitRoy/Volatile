@@ -3,9 +3,9 @@
 
 #include <vector>
 #include <cmath>
-#include "chess/core/Move.hpp"
+#include "core/Move.hpp"
 
-namespace ChessCore {
+namespace VEngine {
 
     class Node {
     public:

@@ -1,12 +1,12 @@
-#include "chess/search/hce/Tablebase.hpp"
-#include "chess/core/MoveGen.hpp"
-#include "chess/core/Bitboard.hpp"
+#include "search/Tablebase.hpp"
+#include "core/MoveGen.hpp"
+#include "core/Bitboard.hpp"
 
 extern "C" {
-    #include "../../fathom/tbprobe.h"
+    #include "../fathom/tbprobe.h"
 }
 
-namespace ChessCore {
+namespace VEngine {
     int Tablebase::MaxPieces = 5;
     bool Tablebase::loaded = false;
 
