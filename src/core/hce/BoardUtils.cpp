@@ -4,15 +4,8 @@
 #include "core/Bitboard.hpp"
 #include "eval/hce/Evaluate.hpp"
 //#define DEBUG_HASH
-#define S(mg, eg) ((int32_t)(((uint32_t)(uint16_t)(eg) << 16) | (uint16_t)(mg)))
-inline int32_t unpack_mg(int32_t s) { return (int16_t)(s & 0xFFFF); }
-inline int32_t unpack_eg(int32_t s) { return (int16_t)((s >> 16) & 0xFFFF); }
-
 namespace VEngine {
 
-    extern const int32_t PieceValueMG[6];
-    extern const int32_t PieceValueEG[6];
-    extern const int32_t game_phase_increment[6];
     extern uint64_t ZOBRIST_PIECES[6][2][64];
     extern uint64_t ZOBRIST_SIDE;
     extern uint64_t ZOBRIST_CASTLING[16];

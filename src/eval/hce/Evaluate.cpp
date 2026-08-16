@@ -3,9 +3,7 @@
 #include "core/Board.hpp"
 #include "search/hce/PawnTable.hpp"
 
-#define S(mg, eg) ((int32_t)(((uint32_t)(uint16_t)(eg) << 16) | (uint16_t)(mg)))
-inline int32_t unpack_mg(int32_t s) { return (int16_t)(s & 0xFFFF); }
-inline int32_t unpack_eg(int32_t s) { return (int16_t)((s >> 16) & 0xFFFF); }
+
 
 namespace VEngine {
 
@@ -132,6 +130,8 @@ namespace VEngine {
 
     const int32_t rook_semi_open[2] = { S(22, 9), S(55, 4) };
     const int32_t phalanx_pawns[8] = { S(0, 0), S(-2, -7), S(-1, -3), S(18, 11), S(47, 39), S(128, 167), S(-129, 412), S(0, 0) };
+    const int32_t PieceValueMG[6] = { 90, 320, 330, 500, 920, 0 };
+    const int32_t PieceValueEG[6] = { 110, 290, 340, 620, 1000, 0 };
     const int32_t game_phase_increment[6] = { 0, 1, 1, 2, 4, 0 };
 
     struct EvalEntry {
