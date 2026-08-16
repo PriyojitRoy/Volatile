@@ -1,5 +1,5 @@
-#ifndef CHESS_SEARCH_SEARCH_H
-#define CHESS_SEARCH_SEARCH_H
+#ifndef VENGINE_SEARCH_SEARCH_H
+#define VENGINE_SEARCH_SEARCH_H
 
 #include "common.h"
 #include "core/Board.hpp"
@@ -124,4 +124,4 @@ void getCorrHistKeys(const Board& board, int& pawnK, int& nonPawnK, int& minorK,
     };
 }
 
-#endif // CHESS_SEARCH_SEARCH_H
+#endif // VENGINE_SEARCH_SEARCH_H

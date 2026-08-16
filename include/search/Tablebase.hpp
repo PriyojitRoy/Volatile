@@ -1,5 +1,5 @@
-#ifndef CHESS_SEARCH_TABLEBASE_H
-#define CHESS_SEARCH_TABLEBASE_H
+#ifndef VENGINE_SEARCH_TABLEBASE_H
+#define VENGINE_SEARCH_TABLEBASE_H
 #include "core/Board.hpp"
 #include "core/Move.hpp"
 #include <string>
@@ -17,4 +17,4 @@ namespace VEngine {
     };
 }
 
-#endif // CHESS_SEARCH_TABLEBASE_H
+#endif // VENGINE_SEARCH_TABLEBASE_H

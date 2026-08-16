@@ -1,5 +1,5 @@
-#ifndef CHESS_EVAL_NNUE_NETWORK_H
-#define CHESS_EVAL_NNUE_NETWORK_H
+#ifndef VENGINE_EVAL_NNUE_NETWORK_H
+#define VENGINE_EVAL_NNUE_NETWORK_H
 
 #include <string>
 #include <vector>
@@ -20,4 +20,4 @@ namespace VEngine {
     }; 
 }
 
-#endif // CHESS_EVAL_NNUE_NETWORK_H
+#endif // VENGINE_EVAL_NNUE_NETWORK_H

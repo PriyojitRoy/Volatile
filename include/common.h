@@ -1,5 +1,5 @@
-#ifndef CHESS_COMMON_H
-#define CHESS_COMMON_H
+#ifndef VENGINE_COMMON_H
+#define VENGINE_COMMON_H
 
 // Standard library headers
 #include <chrono>
@@ -19,4 +19,4 @@
 #include <random>
 #include <limits>
 
-#endif // CHESS_COMMON_H
+#endif // VENGINE_COMMON_H

@@ -1,5 +1,5 @@
-#ifndef CHESS_SEARCH_TT_H
-#define CHESS_SEARCH_TT_H
+#ifndef VENGINE_SEARCH_TT_H
+#define VENGINE_SEARCH_TT_H
 #include <cstdint>
 #include "core/Move.hpp"
 
@@ -36,4 +36,4 @@ namespace VEngine {
     extern TranspositionTable g_tt;
 }
 
-#endif // CHESS_SEARCH_TT_H
+#endif // VENGINE_SEARCH_TT_H

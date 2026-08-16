@@ -1,5 +1,5 @@
-#ifndef CHESS_UCI_UCIHANDLER_H
-#define CHESS_UCI_UCIHANDLER_H
+#ifndef VENGINE_UCI_UCIHANDLER_H
+#define VENGINE_UCI_UCIHANDLER_H
 
 #include <thread>
 #include <string>
@@ -42,4 +42,4 @@ namespace VEngine {
     };
 }
 
-#endif // CHESS_UCI_UCIHANDLER_H
+#endif // VENGINE_UCI_UCIHANDLER_H

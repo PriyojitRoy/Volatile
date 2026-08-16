@@ -1,5 +1,5 @@
-#ifndef CHESS_SEARCH_DATAGEN_H
-#define CHESS_SEARCH_DATAGEN_H
+#ifndef VENGINE_SEARCH_DATAGEN_H
+#define VENGINE_SEARCH_DATAGEN_H
 #include "core/Board.hpp"
 #include <string>
 #include <vector>
@@ -44,4 +44,4 @@ namespace VEngine {
     };
 }
 
-#endif // CHESS_SEARCH_DATAGEN_H
+#endif // VENGINE_SEARCH_DATAGEN_H

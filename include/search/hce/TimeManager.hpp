@@ -1,5 +1,5 @@
-#ifndef CHESS_SEARCH_TIMEMANAGER_H
-#define CHESS_SEARCH_TIMEMANAGER_H
+#ifndef VENGINE_SEARCH_TIMEMANAGER_H
+#define VENGINE_SEARCH_TIMEMANAGER_H
 #include <algorithm>
 #include <cmath>
 #include "core/Constants.hpp"
@@ -62,4 +62,4 @@ namespace VEngine {
     };
 }
 
-#endif // CHESS_SEARCH_TIMEMANAGER_H
+#endif // VENGINE_SEARCH_TIMEMANAGER_H

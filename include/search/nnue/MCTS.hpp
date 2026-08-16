@@ -1,5 +1,5 @@
-#ifndef CHESS_SEARCH_NNUE_MCTS_H
-#define CHESS_SEARCH_NNUE_MCTS_H
+#ifndef VENGINE_SEARCH_NNUE_MCTS_H
+#define VENGINE_SEARCH_NNUE_MCTS_H
 
 #include "common.h"
 #include "core/Board.hpp"
@@ -27,4 +27,4 @@ namespace VEngine {
 
 }
 
-#endif // CHESS_SEARCH_NNUE_MCTS_H
+#endif // VENGINE_SEARCH_NNUE_MCTS_H

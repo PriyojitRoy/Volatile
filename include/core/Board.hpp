@@ -1,5 +1,5 @@
-#ifndef CHESS_BOARD_H
-#define CHESS_BOARD_H
+#ifndef VENGINE_BOARD_H
+#define VENGINE_BOARD_H
 
 #include "common.h"
 #include "core/Bitboard.hpp"
@@ -76,4 +76,4 @@ namespace VEngine {
     };
 }
 
-#endif // CHESS_BOARD_H
+#endif // VENGINE_BOARD_H

@@ -1,5 +1,5 @@
-#ifndef CHESS_SEARCH_NODE_H
-#define CHESS_SEARCH_NODE_H
+#ifndef VENGINE_SEARCH_NODE_H
+#define VENGINE_SEARCH_NODE_H
 
 #include <vector>
 #include <cmath>
@@ -30,4 +30,4 @@ namespace VEngine {
     };
 }
 
-#endif // CHESS_SEARCH_NODE_H
+#endif // VENGINE_SEARCH_NODE_H

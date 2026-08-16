@@ -1,5 +1,5 @@
-#ifndef CHESS_EVAL_HCE_EVALUATOR_H
-#define CHESS_EVAL_HCE_EVALUATOR_H
+#ifndef VENGINE_EVAL_HCE_EVALUATOR_H
+#define VENGINE_EVAL_HCE_EVALUATOR_H
 #include <string>
 #include <vector>
 #include "core/Board.hpp"
@@ -22,4 +22,4 @@ namespace VEngine {
     }; 
 }
 
-#endif // CHESS_EVAL_HCE_EVALUATOR_H
+#endif // VENGINE_EVAL_HCE_EVALUATOR_H

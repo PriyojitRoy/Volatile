@@ -1,5 +1,5 @@
-#ifndef CHESS_SEARCH_PAWNTABLE_H
-#define CHESS_SEARCH_PAWNTABLE_H
+#ifndef VENGINE_SEARCH_PAWNTABLE_H
+#define VENGINE_SEARCH_PAWNTABLE_H
 #include <cstdint>
 #include <vector>
 
@@ -50,4 +50,4 @@ namespace VEngine {
     extern PawnTable g_pawnTable;
 }
 
-#endif // CHESS_SEARCH_PAWNTABLE_H
+#endif // VENGINE_SEARCH_PAWNTABLE_H

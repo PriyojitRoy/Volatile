@@ -1,5 +1,5 @@
-#ifndef CHESS_MOVEGEN_H
-#define CHESS_MOVEGEN_H
+#ifndef VENGINE_MOVEGEN_H
+#define VENGINE_MOVEGEN_H
 
 #include "common.h"
 #include "core/Board.hpp"
@@ -47,4 +47,4 @@ namespace VEngine {
     };
 }
 
-#endif // CHESS_MOVEGEN_H
+#endif // VENGINE_MOVEGEN_H

@@ -1,5 +1,5 @@
-#ifndef CHESS_EVAL_NNUE_ACCUMULATOR_H
-#define CHESS_EVAL_NNUE_ACCUMULATOR_H
+#ifndef VENGINE_EVAL_NNUE_ACCUMULATOR_H
+#define VENGINE_EVAL_NNUE_ACCUMULATOR_H
 #include <array>
 #include <vector>
 #include <cstdint>
@@ -18,4 +18,4 @@ namespace VEngine {
     };
 }
 
-#endif // CHESS_EVAL_NNUE_ACCUMULATOR_H
+#endif // VENGINE_EVAL_NNUE_ACCUMULATOR_H

@@ -1,5 +1,5 @@
-#ifndef CHESS_MOVE_H
-#define CHESS_MOVE_H
+#ifndef VENGINE_MOVE_H
+#define VENGINE_MOVE_H
 
 #include "common.h"
 
@@ -72,4 +72,4 @@ namespace VEngine {
     };
 }
 
-#endif // CHESS_MOVE_H
+#endif // VENGINE_MOVE_H

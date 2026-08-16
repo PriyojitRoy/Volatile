@@ -1,5 +1,5 @@
-#ifndef CHESS_CONSTANTS_H
-#define CHESS_CONSTANTS_H
+#ifndef VENGINE_CONSTANTS_H
+#define VENGINE_CONSTANTS_H
 
 #include "common.h"
 
@@ -73,4 +73,4 @@ namespace VEngine {
     constexpr int ValueKing = 20000;
 }
 
-#endif // CHESS_CONSTANTS_H
+#endif // VENGINE_CONSTANTS_H
