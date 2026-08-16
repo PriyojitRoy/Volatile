@@ -1,5 +1,5 @@
-#ifndef CHESS_SEARCH_OPENINGBOOK_H
-#define CHESS_SEARCH_OPENINGBOOK_H
+#ifndef VENGINE_SEARCH_OPENINGBOOK_H
+#define VENGINE_SEARCH_OPENINGBOOK_H
 #include "core/Board.hpp"
 #include "core/Move.hpp"
 #include <string>
@@ -27,9 +27,7 @@ namespace VEngine {
         static std::vector<PolyglotEntry> entries;
         
         static uint64_t computePolyglotHash(const Board& board);
-        
-        static const uint64_t PolyglotRandoms[781]; 
     };
 }
 
-#endif // CHESS_SEARCH_OPENINGBOOK_H
+#endif // VENGINE_SEARCH_OPENINGBOOK_H

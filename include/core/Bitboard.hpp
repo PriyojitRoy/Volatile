@@ -1,8 +1,9 @@
-#ifndef CHESS_BITBOARD_H
-#define CHESS_BITBOARD_H
+#ifndef VENGINE_BITBOARD_H
+#define VENGINE_BITBOARD_H
 
 #include "common.h"
 #include "core/Constants.hpp"
+#include "core/ConstantArrays.hpp"
 
 namespace VEngine {
 
@@ -16,26 +17,18 @@ namespace VEngine {
         static uint64_t bishopTable[64][512];
         static uint64_t knightTable[64];
         static uint64_t kingTable[64];
-        
-        static const uint64_t rookMasks[64];
-        static const uint64_t rookMagics[64];
-        static const int rookShifts[64];
-
-        static const uint64_t bishopMasks[64];
-        static const uint64_t bishopMagics[64];
-        static const int bishopShifts[64];
 
         static void init();
 
         static inline uint64_t getRookAttacks(int sq, uint64_t occupancy) {
-            occupancy &= rookMasks[sq];
-            unsigned idx = (occupancy * rookMagics[sq]) >> rookShifts[sq];
+            occupancy &= ConstantArrays::BitboardData::rookMasks[sq];
+            unsigned idx = (occupancy * ConstantArrays::BitboardData::rookMagics[sq]) >> ConstantArrays::BitboardData::rookShifts[sq];
             return rookTable[sq][idx];
         }
 
         static inline uint64_t getBishopAttacks(int sq, uint64_t occupancy) {
-            occupancy &= bishopMasks[sq];
-            unsigned idx = (occupancy * bishopMagics[sq]) >> bishopShifts[sq];
+            occupancy &= ConstantArrays::BitboardData::bishopMasks[sq];
+            unsigned idx = (occupancy * ConstantArrays::BitboardData::bishopMagics[sq]) >> ConstantArrays::BitboardData::bishopShifts[sq];
             return bishopTable[sq][idx];
         }
 
@@ -66,4 +59,4 @@ namespace VEngine {
     };
 }
 
-#endif // CHESS_BITBOARD_H
+#endif // VENGINE_BITBOARD_H
