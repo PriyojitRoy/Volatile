@@ -69,6 +69,50 @@ We welcome contributions of all sizes! To maintain a high-quality, maintainable,
 6. **Zero Flaw Tolerance:** Your contribution, no matter how small, is always welcomed, but it must be flawless.
 7. **Dual Build Verification:** Because Volatile supports both Hand-Crafted Evaluation (HCE) and NNUE backends, you must build and test your changes with both `USE_NNUE=OFF` and `USE_NNUE=ON` to ensure no build configuration is broken.
 
+## Prerequisites
+
+To build and run Volatile, you will need a modern C++ compiler (supporting C++17), CMake, and Python 3 (for auxiliary scripts). Below are the commands to install the required system packages across different operating systems.
+
+**Ubuntu / Debian:**
+```bash
+sudo apt update
+sudo apt install build-essential cmake python3 python3-venv python3-pip
+```
+
+**macOS (Homebrew):**
+```bash
+brew install cmake python
+```
+*(macOS includes a C++ compiler via Xcode Command Line Tools, which can be installed with `xcode-select --install`)*
+
+**Arch Linux:**
+```bash
+sudo pacman -Syu base-devel cmake python python-pip
+```
+
+**Termux (Android):**
+```bash
+pkg update
+pkg install clang cmake make python
+```
+
+**Windows:**
+You can install [Visual Studio 2022](https://visualstudio.microsoft.com/vs/) with the "Desktop development with C++" workload, which includes MSVC, CMake, and other necessary build tools. Python can be installed via the [Microsoft Store](https://apps.microsoft.com/store/detail/python-311/9NRWMJP3717K) or [python.org](https://www.python.org/downloads/).
+
+### Setting Up Python Dependencies
+
+Volatile includes a few Python scripts for data processing and utility generation. It is recommended to use a virtual environment (`venv`) to avoid interfering with system-wide Python packages. We provide a cross-platform setup script that automates this:
+
+1. **Linux / macOS / Termux:** Run `./setup.sh`
+2. **Windows:** Run `setup.bat`
+
+Alternatively, you can manually create a `venv` and install the requirements:
+```bash
+python3 -m venv .venv
+source .venv/bin/activate    # On Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+```
+
 ## Building Volatile
 
 Volatile is built using CMake.
