@@ -58,20 +58,51 @@ check_tool() {
 setup_venv() {
     local python_cmd=$1
     echo "-------------------------------------"
+    
+    # Termux specific fixes for numpy/ninja compilation issues
+    local is_termux=false
+    local venv_args=""
+    if [[ "$(uname -o 2>/dev/null)" == *"Android"* ]] || [[ "$PREFIX" == *"com.termux"* ]]; then
+        is_termux=true
+        echo "Termux environment detected!"
+        echo "Translating requirements.txt into native Termux packages..."
+        
+        # Read requirements.txt, extract base package names, convert to lowercase, and prefix with python-
+        local termux_pkgs=""
+        while read -r line; do
+            # Skip comments and empty lines
+            [[ "$line" =~ ^#.*$ ]] || [[ -z "$line" ]] && continue
+            # Extract package name (everything before version specifiers like >=, ==)
+            local pkg_name=$(echo "$line" | grep -o '^[A-Za-z0-9_-]*' | tr '[:upper:]' '[:lower:]')
+            if [ -n "$pkg_name" ]; then
+                termux_pkgs="$termux_pkgs python-$pkg_name"
+            fi
+        done < requirements.txt
+        
+        echo "Installing system-level packages: $termux_pkgs"
+        pkg install -y $termux_pkgs
+        venv_args="--system-site-packages"
+    fi
+
     if [ -d "$VENV_DIR" ]; then
         echo "Removing existing virtual environment to ensure a clean build..."
         rm -rf "$VENV_DIR"
     fi
     
     echo "Creating Python virtual environment in $VENV_DIR..."
-    "$python_cmd" -m venv "$VENV_DIR"
+    "$python_cmd" -m venv $venv_args "$VENV_DIR"
 
     echo "Activating virtual environment..."
     source "$VENV_DIR/bin/activate"
 
     echo "Installing Python dependencies..."
     python -m pip install --upgrade pip
-    python -m pip install -r requirements.txt
+    
+    if [ "$is_termux" = true ]; then
+        echo "Skipping pip install on Termux as dependencies were installed natively via pkg."
+    else
+        python -m pip install -r requirements.txt
+    fi
 }
 
 # ==========================================
