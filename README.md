@@ -73,45 +73,17 @@ We welcome contributions of all sizes! To maintain a high-quality, maintainable,
 
 To build and run Volatile, you will need a modern C++ compiler (supporting C++17), CMake, and Python 3 (for auxiliary scripts). Below are the commands to install the required system packages across different operating systems.
 
-**Ubuntu / Debian:**
-```bash
-sudo apt update
-sudo apt install build-essential cmake python3 python3-venv python3-pip
-```
-
-**macOS (Homebrew):**
-```bash
-brew install cmake python
-```
-*(macOS includes a C++ compiler via Xcode Command Line Tools, which can be installed with `xcode-select --install`)*
-
-**Arch Linux:**
-```bash
-sudo pacman -Syu base-devel cmake python python-pip
-```
-
-**Termux (Android):**
-```bash
-pkg update
-pkg install clang cmake make python
-```
-
-**Windows:**
-You can install [Visual Studio 2022](https://visualstudio.microsoft.com/vs/) with the "Desktop development with C++" workload, which includes MSVC, CMake, and other necessary build tools. Python can be installed via the [Microsoft Store](https://apps.microsoft.com/store/detail/python-311/9NRWMJP3717K) or [python.org](https://www.python.org/downloads/).
-
 ### Setting Up Python Dependencies
 
-Volatile includes a few Python scripts for data processing and utility generation. It is recommended to use a virtual environment (`venv`) to avoid interfering with system-wide Python packages. We provide a cross-platform setup script that automates this:
+Volatile includes a few Python scripts for data processing and utility generation. It is recommended to use a virtual environment (`venv`) to avoid interfering with system-wide Python packages. 
 
-1. **Linux / macOS / Termux:** Run `./setup.sh`
+We provide a cross-platform setup script that automates this:
+
+1. **Linux / macOS:** Run `./setup.sh`
 2. **Windows:** Run `setup.bat`
 
-Alternatively, you can manually create a `venv` and install the requirements:
-```bash
-python3 -m venv .venv
-source .venv/bin/activate    # On Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-```
+> [!NOTE]
+> The Python virtual environment is **strictly optional** for building and running the core C++ chess engine itself. You only need it if you plan to use the Python utility scripts. You can activate the venv by `source .venv/bin/activate` on Linux/ MacOS or `.venv\Scripts\activate` on Windows. 
 
 ## Building Volatile
 
@@ -124,7 +96,14 @@ cd build
 cmake .. -DUSE_NNUE=OFF
 make -j$(nproc)
 ```
+Or 
 
+**To build the NNUE engine:**
+
+```bash
+cmake .. -DUSE_NNUE=ON
+make -j$(nproc)
+```
 **To run the engine:**
 ```bash
 ./Volatile
