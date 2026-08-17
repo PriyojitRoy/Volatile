@@ -61,7 +61,7 @@ int main(int argc, char* argv[]) {
     };
 
     if (VEngine::OpeningBook::load(myBooks)) {
-        std::cout << "Engine ready with combined opening knowledge!" << std::endl;
+        std::cout << "Type 'help' to see a list of available commands." << std::endl;
     } else {
         std::cout << "Playing without an opening book." << std::endl;
     }

@@ -68,9 +68,8 @@ namespace VEngine {
         std::cout << "Done." << std::endl;
         
         hasBook = true;
-        Board testBoard; 
-        uint64_t startHash = computePolyglotHash(testBoard);
-        std::cout << "info string Startup Polyglot Hash: " << std::hex << startHash << std::dec << std::endl;
+        // uint64_t startHash = computePolyglotHash(testBoard);
+        // std::cout << "info string Startup Polyglot Hash: " << std::hex << startHash << std::dec << std::endl;
         // if (startHash == 0x463b96181691fc9cULL) {
         //     std::cout << "info string [SUCCESS] Polyglot Hashing is PERFECT!" << std::endl;
         // } else {

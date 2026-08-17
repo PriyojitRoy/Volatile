@@ -4,6 +4,9 @@
 #include <thread>
 #include <string>
 #include <vector>
+#include <unordered_map>
+#include <functional>
+#include <sstream>
 #include "core/Board.hpp"
 #include "core/Move.hpp"
 
@@ -16,29 +19,33 @@
 
 namespace VEngine {
 
+    struct Command {
+        std::string syntax;
+        std::string description;
+        std::function<void(std::istringstream&)> handler;
+    };
+
     class UCIHandler {
     public:
         UCIHandler();
         void loop();
 
-    private:
+        Move parseMove(const std::string& moveStr);
+        uint64_t runPerft(Board& b, int depth);
+
         Board board;
         std::thread searchThread;
+        bool isRunning;
 
-        // The searcher type depends on the evaluation backend selected at build time
 #ifdef USE_NNUE
         MCTS searcher;
 #else
         Search searcher;
 #endif
 
-        uint64_t runPerft(Board& b, int depth);
-        void playHuman();
-        Move parseMove(const std::string& moveStr);
-        void parsePosition(const std::string& input);
-        void parseGo(const std::string& input);
-        void playSelf(int movesToPlay);
-        std::vector<std::string> split(const std::string& s, char delimiter);
+    private:
+        std::unordered_map<std::string, Command> commands;
+        void registerCommands();
     };
 }
 
