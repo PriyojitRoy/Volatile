@@ -51,20 +51,7 @@ int main(int argc, char* argv[]) {
 
     VEngine::UCIHandler handler;
 
-    std::vector<std::string> myBooks = {
-        "Human.bin",
-        "gm2001.bin",
-        "komodo.bin",
-        "Perfect2021.bin",
-        "rodent.bin",
-        "Titans.bin"
-    };
-
-    if (VEngine::OpeningBook::load(myBooks)) {
-        std::cout << "Type 'help' to see a list of available commands." << std::endl;
-    } else {
-        std::cout << "Playing without an opening book." << std::endl;
-    }
+    std::cout << "Type 'help' to see a list of available commands." << std::endl;
 
     handler.loop();
 

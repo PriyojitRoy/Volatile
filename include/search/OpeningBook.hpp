@@ -16,6 +16,7 @@ namespace VEngine {
 
     class OpeningBook {
     public:
+        static void init(const std::string& paths);
         // Load a .bin file into memory
         static bool load(const std::vector<std::string>& filenames);        
         // Query the book for a move matching the current board

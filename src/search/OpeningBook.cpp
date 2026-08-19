@@ -11,28 +11,28 @@ namespace VEngine {
     std::vector<PolyglotEntry> OpeningBook::entries;
 
 
+    void OpeningBook::init(const std::string& paths) {
+        std::vector<std::string> bookPaths;
+        size_t pos = 0;
+        std::string s = paths;
+        while ((pos = s.find(";")) != std::string::npos) {
+            std::string token = s.substr(0, pos);
+            if (!token.empty()) bookPaths.push_back(token);
+            s.erase(0, pos + 1);
+        }
+        if (!s.empty()) bookPaths.push_back(s);
+        
+        load(bookPaths);
+    }
+
     bool OpeningBook::load(const std::vector<std::string>& filenames) {
         entries.clear();
 
         for (const std::string& filename : filenames) {
-            std::ifstream file;
-            std::vector<std::string> searchPaths = {
-                "data/books/",
-                "../data/books/",
-                "../../data/books/"
-            };
-            
-            bool opened = false;
-            for (const auto& path : searchPaths) {
-                file.open(path + filename, std::ios::binary);
-                if (file.is_open()) {
-                    opened = true;
-                    break;
-                }
-            }
+            std::ifstream file(filename, std::ios::binary);
 
-            if (!opened) {
-                std::cout << "Warning: Could not open book file " << filename << std::endl;
+            if (!file.is_open()) {
+                std::cout << "info string Warning: Could not open book file " << filename << std::endl;
                 continue;
             }
 
@@ -53,7 +53,7 @@ namespace VEngine {
                 entry.learn = __builtin_bswap32(entry.learn);
                 entries.push_back(entry);
             }
-            std::cout << "Loaded " << numEntries << " positions from " << filename << std::endl;
+            std::cout << "info string Loaded " << numEntries << " positions from " << filename << std::endl;
         }
 
         if (entries.empty()) {
@@ -61,7 +61,7 @@ namespace VEngine {
             return false;
         }
 
-        std::cout << "Sorting combined opening book... " << std::flush;
+        std::cout << "info string Sorting combined opening book... " << std::flush;
         std::sort(entries.begin(), entries.end(), [](const PolyglotEntry& a, const PolyglotEntry& b) {
             return a.key < b.key;
         });

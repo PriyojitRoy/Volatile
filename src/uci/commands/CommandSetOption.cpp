@@ -1,6 +1,7 @@
 #include "uci/commands/Commands.hpp"
 #include "uci/UCIHandler.hpp"
 #include "search/Tablebase.hpp"
+#include "search/OpeningBook.hpp"
 #include "search/TT.hpp"
 #include <iostream>
 
@@ -20,6 +21,9 @@ namespace VEngine {
             
             if (name == "SyzygyPath") {
                 Tablebase::init(value);
+            }
+            else if (name == "BookPath") {
+                OpeningBook::init(value);
             }
             else if (name == "Hash") {
                 int mb = std::stoi(value);
