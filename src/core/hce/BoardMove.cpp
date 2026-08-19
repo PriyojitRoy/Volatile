@@ -196,8 +196,21 @@ bool Board::makeMove(Move move) {
         else halfMoveClock++;
 
         enPassantSq = SqNone;
-        if (piece == Pawn && flags == DoublePawnPush)
-            enPassantSq = (movingColor == White) ? from + 8 : from - 8;
+        if (piece == Pawn && flags == DoublePawnPush) {
+            int epSq = (movingColor == White) ? from + 8 : from - 8;
+            int enemyColor = 1 - movingColor;
+            uint64_t enemyPawns = getPieces(Pawn, enemyColor);
+            int epRank = (movingColor == White) ? 4 : 3;
+            int epFile = to % 8;
+            
+            bool canCapture = false;
+            if (epFile > 0 && (enemyPawns & (1ULL << (epRank * 8 + epFile - 1)))) canCapture = true;
+            if (epFile < 7 && (enemyPawns & (1ULL << (epRank * 8 + epFile + 1)))) canCapture = true;
+            
+            if (canCapture) {
+                enPassantSq = epSq;
+            }
+        }
 
         if (piece == King)
             castlingRights &= (movingColor == White)
