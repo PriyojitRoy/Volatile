@@ -5,9 +5,9 @@ This document provides a deep-dive into the architectural design of the Volatile
 ## 1. High-Level Design Principles
 
 - **Separation of Concerns:** The engine strongly decouples the core chess logic (board representation, move generation) from the evaluation and search backends.
-- **Backend Dichotomy (HCE vs. NNUE):** Volatile is fundamentally split between two evaluation and search paradigms:
-  - **HCE (Hand-Crafted Evaluation):** The traditional alpha-beta/negamax search using manually tuned evaluation functions (material, PSTs, mobility, etc.).
-  - **NNUE (Efficiently Updatable Neural Networks):** An advanced neural network evaluator primarily paired with a Monte-Carlo Tree Search (MCTS) backend.
+- **Backend Dichotomy (HCE vs. NNUE):** Volatile previously maintained separate search paradigms but is now fully unified. Both paradigms use the exact same Alpha-Beta search logic, heuristics, and transposition tables.
+  - **HCE (Hand-Crafted Evaluation):** Traditional evaluation based on piece-square tables and material.
+  - **NNUE (Efficiently Updatable Neural Networks):** Advanced neural network evaluator that seamlessly overrides the HCE via CMake.
 - **Build-Time Polymorphism:** To maximize performance, Volatile avoids runtime virtual dispatch where possible. The switch between HCE and NNUE is controlled via CMake (`USE_NNUE=ON` vs. `USE_NNUE=OFF`). The build system conditionally compiles the correct `src/` subdirectories.
 
 ## 2. Directory and Module Breakdown
@@ -23,7 +23,7 @@ This module defines the rules and state of chess.
 - **`Move.hpp / .cpp`**: Move encoding/decoding (typically using bitfields for from-square, to-square, promotion piece, and special flags like castling/en-passant).
 - **`MoveGen.hpp / .cpp`**: Generates pseudo-legal and legal moves. Often leverages magic bitboards for sliding pieces.
 - **`Board.hpp`**: The central state of the game. Contains bitboards for pieces, castling rights, en-passant square, and half-move clocks.
-  - *Implementation Split:* Because HCE requires incremental updates to evaluation scores (e.g., updating a running PST score upon making a move), the `Board` implementation is physically split between `src/core/hce/` and `src/core/nnue/`. The NNUE variant avoids tracking HCE state, thereby saving CPU cycles during network rollouts.
+  - *Unified Implementation:* The `Board` implementation uses zero-overhead C++ macro abstractions (`#ifndef USE_NNUE`) to bypass HCE-specific incremental updates when compiling for NNUE. This allows a single, unified `BoardMove.cpp` to efficiently support both evaluation backends without duplicated logic.
 
 ### 2.2 Evaluation (`eval/`)
 
@@ -40,14 +40,11 @@ Handles static position evaluation.
 
 The search module handles exploring the game tree to find the best move.
 
-- **`search/hce/`**: Traditional Alpha-Beta search.
-  - **`Search.hpp / .cpp`**: The main Principal Variation Search (PVS) and Negamax framework, using Iterative Deepening and Aspiration Windows.
-  - **`Quiescence.cpp`**: Quiescence Search (QS) resolves tactical volatility at the leaf nodes (captures and promotions) to avoid the horizon effect.
-  - **`MoveOrdering.cpp`**: Crucial for alpha-beta efficiency. Orders moves to maximize pruning. Implements Hash moves, SEE (Static Exchange Evaluation), Killer Moves, and History Heuristics.
+- **`Search.hpp / .cpp`**: The main Principal Variation Search (PVS) and Negamax framework. This search acts as the universal engine core for both HCE and NNUE.
+  - **`Quiescence.cpp`**: Resolves tactical volatility at the leaf nodes (captures and promotions) to avoid the horizon effect.
+  - **`MoveOrdering.cpp`**: Crucial for alpha-beta efficiency. Implements Hash moves, SEE, Killer Moves, and History Heuristics (including Correction Histories for both pawns and non-pawns, which natively apply to NNUE evaluations as well).
   - **`TT.hpp / .cpp`**: Transposition Table with lockless hashing for caching exact scores and alpha/beta bounds.
-  - **Pruning Techniques:** Null Move Pruning (NMP), Late Move Reductions (LMR), Reverse Futility Pruning (RFP), and ProbCut are heavily integrated.
-- **`search/nnue/`**: 
-  - Primarily focuses on Monte-Carlo Tree Search (MCTS) implementations to leverage the NNUE evaluations effectively, balancing exploration and exploitation (UCT).
+  - **Pruning Techniques:** Null Move Pruning (NMP), Late Move Reductions (LMR), Reverse Futility Pruning (RFP), and ProbCut.
 
 ### 2.4 UCI (`uci/`)
 

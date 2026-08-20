@@ -5,20 +5,13 @@ Welcome to the **Contribution Scope** document for Volatile. This file outlines 
 If you are a newcomer (human or AI agent) looking for an idea of what to work on, this is the place to start. 
 
 ## 1. NNUE Integration (Efficiently Updatable Neural Networks)
-**Status:** Incomplete / In Progress
+**Status:** In Progress (Inference & Accumulator TODOs)
 
-The codebase architecture has been split to support a dual-backend evaluation (`USE_NNUE=ON` vs `OFF`), but the actual neural network evaluation logic still needs significant work.
-- **Network Inference:** Implementing fast, SIMD-optimized (AVX2/AVX-512) network inference for the accumulator.
-- **Training Data Pipeline:** We need scripts/methods for generating high-quality training data from the HCE engine.
-- **Evaluation Tuning:** Replacing or supplementing the Hand-Crafted Evaluation (HCE) cleanly with the network's output.
-
-## 2. MCTS Search (Monte-Carlo Tree Search)
-**Status:** Incomplete / Pending
-
-While traditional Alpha-Beta/Negamax is fully implemented for the HCE backend, NNUE evaluations often pair better with Monte-Carlo Tree Search. 
-- **Tree Policy:** Implementing a robust UCT (Upper Confidence Bound applied to Trees) formula.
-- **Rollout/Playout:** Handling leaf node evaluations via the NNUE network efficiently without updating HCE state.
-- **Concurrency:** MCTS scales beautifully with threads. A lockless, multi-threaded MCTS implementation is highly desired.
+The codebase architecture has been successfully unified. Both HCE and NNUE now share the exact same Alpha-Beta search, transposition tables, and search heuristics! The remaining work is strictly focused on the NNUE inference:
+- **Accumulator Updates:** Implementing `Accumulator.cpp` with `int16_t` arrays and AVX2 SIMD optimizations for Stockfish-level speed.
+- **Incremental Updates:** Filling in the `TODO: Accumulator update` hooks inside `BoardMove.cpp` to incrementally update the accumulator during `makeMove`.
+- **Network Inference:** Implementing `Network::evaluate()` to collapse the accumulator into a centipawn score and `Network::load()` to parse `.nnue` binary files.
+- **Training Pipeline:** Generating millions of high-quality positions using the HCE engine to train a PyTorch model.
 
 ## 3. Comprehensive Test Suite
 **Status:** Undone / Needs Expansion
