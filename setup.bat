@@ -100,5 +100,15 @@ call %VENV_DIR%\Scripts\activate.bat
 
 echo Installing Python dependencies...
 python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
+python -m pip install -r requirements-sys.txt -r requirements.txt
+if %ERRORLEVEL% NEQ 0 (
+    echo.
+    echo ================================================================
+    echo  [WARNING] Python Dependencies Failed to Install
+    echo ================================================================
+    echo  Some utility scripts in scripts/ may not work correctly.
+    echo  However, this does NOT affect the actual C++ chess engine.
+    echo  You can still compile, run, and play against the engine perfectly!
+    echo ================================================================
+)
 exit /b 0

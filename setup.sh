@@ -67,20 +67,20 @@ setup_venv() {
         echo "Termux environment detected!"
         echo "Translating requirements.txt into native Termux packages..."
         
-        # Read requirements.txt, extract base package names, convert to lowercase, and prefix with python-
-        local termux_pkgs=""
-        while read -r line; do
-            # Skip comments and empty lines
-            [[ "$line" =~ ^#.*$ ]] || [[ -z "$line" ]] && continue
-            # Extract package name (everything before version specifiers like >=, ==)
-            local pkg_name=$(echo "$line" | grep -o '^[A-Za-z0-9_-]*' | tr '[:upper:]' '[:lower:]')
-            if [ -n "$pkg_name" ]; then
-                termux_pkgs="$termux_pkgs python-$pkg_name"
-            fi
-        done < requirements.txt
-        
-        echo "Installing system-level packages: $termux_pkgs"
-        pkg install -y $termux_pkgs
+        # Read from requirements-sys.txt for heavy C-extension packages
+        if [ -f "requirements-sys.txt" ]; then
+            while read -r line; do
+                # Skip comments and empty lines
+                [[ "$line" =~ ^#.*$ ]] || [[ -z "$line" ]] && continue
+                local pkg_name=$(echo "$line" | grep -o '^[A-Za-z0-9_-]*' | tr '[:upper:]' '[:lower:]')
+                if [ -n "$pkg_name" ]; then
+                    echo "Attempting to install system-level C-extension: python-$pkg_name"
+                    if ! pkg install -y "python-$pkg_name"; then
+                        echo "[-] Warning: Failed to install python-$pkg_name natively. Pip will attempt to build it."
+                    fi
+                fi
+            done < requirements-sys.txt
+        fi
         venv_args="--system-site-packages"
     fi
 
@@ -95,13 +95,27 @@ setup_venv() {
     echo "Activating virtual environment..."
     source "$VENV_DIR/bin/activate"
 
-    echo "Installing Python dependencies..."
+    echo "Installing Python dependencies via pip..."
     python -m pip install --upgrade pip
     
+    # On Termux, we completely hide requirements-sys.txt from pip to strictly forbid
+    # it from attempting to build numpy/pillow from source if the native pkg install failed
+    # or if the venv fails to expose the system site-packages correctly.
     if [ "$is_termux" = true ]; then
-        echo "Skipping pip install on Termux as dependencies were installed natively via pkg."
+        PIP_ARGS="-r requirements.txt"
     else
-        python -m pip install -r requirements.txt
+        PIP_ARGS="-r requirements-sys.txt -r requirements.txt"
+    fi
+
+    if ! python -m pip install $PIP_ARGS; then
+        echo ""
+        echo "================================================================"
+        echo " [WARNING] Python Dependencies Failed to Install"
+        echo "================================================================"
+        echo " Some utility scripts in scripts/ may not work correctly."
+        echo " However, this does NOT affect the actual C++ chess engine."
+        echo " You can still compile, run, and play against the engine perfectly!"
+        echo "================================================================"
     fi
 }
 

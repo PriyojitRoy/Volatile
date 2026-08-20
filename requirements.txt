@@ -1,6 +1,1 @@
-# Volatile Python Dependencies
-# Generated for utility scripts
-
-numpy>=1.21.0
-Pillow>=9.0.0
 chess>=1.10.0
