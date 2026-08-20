@@ -15,11 +15,19 @@ namespace VEngine {
         std::vector<std::string> bookPaths;
         size_t pos = 0;
         std::string s = paths;
+        
+        auto trim = [](std::string& str) {
+            str.erase(0, str.find_first_not_of(" \t\r\n"));
+            str.erase(str.find_last_not_of(" \t\r\n") + 1);
+        };
+
         while ((pos = s.find(";")) != std::string::npos) {
             std::string token = s.substr(0, pos);
+            trim(token);
             if (!token.empty()) bookPaths.push_back(token);
             s.erase(0, pos + 1);
         }
+        trim(s);
         if (!s.empty()) bookPaths.push_back(s);
         
         load(bookPaths);

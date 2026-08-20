@@ -48,6 +48,9 @@ namespace VEngine {
             "Tell engine to use the uci (universal chess interface)", 
             [](std::istringstream&) {
                 std::cout << "id name Volatile Chess Engine VCE" << std::endl;
+#ifdef USE_NNUE
+                std::cout << "info string WARNING: Engine compiled with USE_NNUE=ON but NNUE is currently a stub! Evaluation will be incorrect/invalid." << std::endl;
+#endif
                 std::cout << "option name SyzygyPath type string default <empty>" << std::endl;
                 std::cout << "option name BookPath type string default <empty>" << std::endl;
                 std::cout << "option name Hash type spin default 64 min 1 max 8192" << std::endl;
