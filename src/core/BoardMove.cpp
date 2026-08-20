@@ -11,7 +11,7 @@ namespace VEngine {
     extern uint64_t ZOBRIST_CASTLING[16];
     extern uint64_t ZOBRIST_EP[64];
 void Board::makeNullMove() {
-        history.push_back({
+        GameState st = {
             castlingRights, 
             enPassantSq, 
             halfMoveClock, 
@@ -22,7 +22,11 @@ void Board::makeNullMove() {
             pawnKey,
             minorKey,
             majorKey
-        });
+        };
+#ifdef USE_NNUE
+        st.accumulator = accumulator;
+#endif
+        history.push_back(st);
         
         zorbitKey ^= ZOBRIST_SIDE;
         if (enPassantSq != SqNone) zorbitKey ^= ZOBRIST_EP[enPassantSq];
@@ -65,7 +69,7 @@ bool Board::makeMove(Move move) {
             if (isSquareAttacked(transitSq, 1 - sideToMove)) return false;
         }
 
-        history.push_back({
+        GameState st = {
             castlingRights, 
             enPassantSq, 
             halfMoveClock, 
@@ -76,7 +80,11 @@ bool Board::makeMove(Move move) {
             pawnKey, 
             minorKey, 
             majorKey
-        });
+        };
+#ifdef USE_NNUE
+        st.accumulator = accumulator;
+#endif
+        history.push_back(st);
 
         int captured = getPieceAt(to);
         int movingColor = sideToMove;
@@ -100,6 +108,9 @@ bool Board::makeMove(Move move) {
         evalState.eg[movingColor] -= PieceValueEG[piece] + unpack_eg(PSQT[piece][tableFrom]);
         evalState.phase -= game_phase_increment[piece];
 #endif
+#ifdef USE_NNUE
+            // TODO: Accumulator update (remove/add feature)
+#endif
         
         Bitboard::popBit(pieces[piece], from);
         Bitboard::popBit(occupancy[movingColor], from);
@@ -113,6 +124,9 @@ bool Board::makeMove(Move move) {
             evalState.mg[capColor] -= PieceValueMG[Pawn] + unpack_mg(PSQT[Pawn][tableCap]);
             evalState.eg[capColor] -= PieceValueEG[Pawn] + unpack_eg(PSQT[Pawn][tableCap]);
             evalState.phase -= game_phase_increment[Pawn];
+#endif
+#ifdef USE_NNUE
+            // TODO: Accumulator update (remove/add feature)
 #endif
             captured = Pawn;
 
@@ -130,6 +144,9 @@ bool Board::makeMove(Move move) {
             evalState.mg[capColor] -= PieceValueMG[captured] + unpack_mg(PSQT[captured][tableCap]);
             evalState.eg[capColor] -= PieceValueEG[captured] + unpack_eg(PSQT[captured][tableCap]);
             evalState.phase -= game_phase_increment[captured];
+#endif
+#ifdef USE_NNUE
+            // TODO: Accumulator update (remove/add feature)
 #endif
 
             Bitboard::popBit(pieces[captured], to);
@@ -173,6 +190,9 @@ bool Board::makeMove(Move move) {
         evalState.eg[movingColor] += PieceValueEG[placedPiece] + unpack_eg(PSQT[placedPiece][tableTo]);
         evalState.phase += game_phase_increment[placedPiece];
 #endif
+#ifdef USE_NNUE
+            // TODO: Accumulator update (remove/add feature)
+#endif
 
         if (flags == KingCastle || flags == QueenCastle) {
             int rF, rT;
@@ -192,6 +212,9 @@ bool Board::makeMove(Move move) {
             evalState.eg[movingColor] -= (PieceValueEG[Rook] + unpack_eg(PSQT[Rook][tableRf]));
             evalState.mg[movingColor] += (PieceValueMG[Rook] + unpack_mg(PSQT[Rook][tableRt]));
             evalState.eg[movingColor] += (PieceValueEG[Rook] + unpack_eg(PSQT[Rook][tableRt]));
+#endif
+#ifdef USE_NNUE
+            // TODO: Accumulator update (remove/add feature)
 #endif
 
             Bitboard::popBit(pieces[Rook], rF); Bitboard::popBit(occupancy[movingColor], rF);
@@ -265,6 +288,9 @@ void Board::unmakeMove(Move move) {
         history.pop_back();
 
         evalState = state.evalState;
+#ifdef USE_NNUE
+        accumulator = state.accumulator;
+#endif
         castlingRights = state.castlingRights;
         enPassantSq = state.enPassantSq;
         halfMoveClock = state.halfMoveClock;

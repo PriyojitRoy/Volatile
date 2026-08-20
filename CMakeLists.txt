@@ -23,6 +23,7 @@ set(GCC_CLANG_WARNINGS
     -Wno-unused-parameter
     -Wno-unused-variable
     -Wno-array-bounds
+    -Wno-missing-field-initializers
 )
 
 set(MSVC_WARNINGS

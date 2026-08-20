@@ -2,6 +2,7 @@
 #define VENGINE_CONSTANTS_H
 
 #include "common.h"
+#include "eval/nnue/Accumulator.hpp"
 
 namespace VEngine {
     extern const int32_t PSQT[6][64];
@@ -47,6 +48,11 @@ namespace VEngine {
         uint64_t pawnKey; 
         uint64_t minorKey;
         uint64_t majorKey;
+
+#ifdef USE_NNUE
+        // Instantly restores NNUE state when unmaking moves
+        Accumulator accumulator;
+#endif
     };
 
     constexpr int RookSlots = 4096;
