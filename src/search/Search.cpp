@@ -388,7 +388,7 @@ namespace VEngine {
         if (depth >= PROBCUT_MIN_DEPTH && !isPV && !inCheck && !isZugzwangRisk && std::abs(beta) < SCORE_MATE_BOUND) {
             int probBeta = beta + PROBCUT_BETA_MARGIN;
             int probDepth = depth - 4;
-            int probScore = -negamax(board, probDepth, -probBeta, -probBeta + 1, ply + 1, ss + 1, false);
+            int probScore = negamax(board, probDepth, probBeta - 1, probBeta, ply, ss, false);
             if (stopSearch) return 0;
 
             if (probScore >= probBeta) {
@@ -493,7 +493,7 @@ namespace VEngine {
             int score;
 
             if (legalMoves == 1) {
-                score = -negamax(board, depth - 1 + extension, -beta, -alpha, ply + 1, ss + 1, true);
+                score = -negamax(board, depth - 1 + extension, -beta, -alpha, ply + 1, ss + 1, isPV);
             } else {
                 int reduction = 0;
                 
@@ -560,8 +560,8 @@ namespace VEngine {
                             }
                             if (ply > 0 && plyMoves[ply - 1].getData() != 0) {
                                 int prevPiece = board.getPieceAt(plyMoves[ply - 1].getTo());
-                                if (prevPiece != None && counterMoves[prevPiece][plyMoves[ply - 1].getTo()] == m) {
-                                    score += COUNTER_MOVE_SCORE; 
+                                if (prevPiece != None) { counterMoves[prevPiece][plyMoves[ply - 1].getTo()] = m;
+                                    
                                 }
                             }
                         }

@@ -104,7 +104,7 @@ namespace VEngine {
                 int aVal = (attacker != None) ? pieceValues[attacker] : 0;
 
                 if (m.isPromotion()) {
-                    score = PROMOTION_BONUS + pieceValues[m.getFlags() & 3]; 
+                    score = PROMOTION_BONUS + pieceValues[(m.getFlags() & 3) + 1] + vVal; 
                 } else {
                     if (vVal < aVal && see(board, m) < 0) {
                         score = BAD_CAPTURE_SCORE + (vVal * VICTIM_VALUE_MULTIPLIER) - aVal;
