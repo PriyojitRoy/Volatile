@@ -2,6 +2,7 @@
 #include "core/Constants.hpp"
 #include "core/Move.hpp"
 #include "core/Bitboard.hpp"
+#include "eval/hce/Evaluate.hpp"
 //#define DEBUG_HASH
 namespace VEngine {
 
@@ -94,9 +95,11 @@ bool Board::makeMove(Move move) {
         }
 
         [[maybe_unused]] int tableFrom = (movingColor == White) ? (from ^ 56) : from;
-        
-        
-        
+        #ifndef USE_NNUE
+        evalState.mg[movingColor] -= PieceValueMG[piece] + unpack_mg(PSQT[piece][tableFrom]);
+        evalState.eg[movingColor] -= PieceValueEG[piece] + unpack_eg(PSQT[piece][tableFrom]);
+        evalState.phase -= game_phase_increment[piece];
+#endif
         
         Bitboard::popBit(pieces[piece], from);
         Bitboard::popBit(occupancy[movingColor], from);
@@ -106,9 +109,11 @@ bool Board::makeMove(Move move) {
             int capSq = (movingColor == White) ? to - 8 : to + 8;
             [[maybe_unused]] int tableCap = (capColor == White) ? (capSq ^ 56) : capSq;
 
-            
-            
-            
+            #ifndef USE_NNUE
+            evalState.mg[capColor] -= PieceValueMG[Pawn] + unpack_mg(PSQT[Pawn][tableCap]);
+            evalState.eg[capColor] -= PieceValueEG[Pawn] + unpack_eg(PSQT[Pawn][tableCap]);
+            evalState.phase -= game_phase_increment[Pawn];
+#endif
             captured = Pawn;
 
             Bitboard::popBit(pieces[Pawn], capSq);
@@ -121,9 +126,11 @@ bool Board::makeMove(Move move) {
             int capColor = 1 - movingColor;
             [[maybe_unused]] int tableCap = (capColor == White) ? (to ^ 56) : to;
 
-            
-            
-            
+            #ifndef USE_NNUE
+            evalState.mg[capColor] -= PieceValueMG[captured] + unpack_mg(PSQT[captured][tableCap]);
+            evalState.eg[capColor] -= PieceValueEG[captured] + unpack_eg(PSQT[captured][tableCap]);
+            evalState.phase -= game_phase_increment[captured];
+#endif
 
             Bitboard::popBit(pieces[captured], to);
             Bitboard::popBit(occupancy[capColor], to);
@@ -161,9 +168,11 @@ bool Board::makeMove(Move move) {
         }
 
         [[maybe_unused]] int tableTo = (movingColor == White) ? (to ^ 56) : to;
-        
-        
-        
+        #ifndef USE_NNUE
+        evalState.mg[movingColor] += PieceValueMG[placedPiece] + unpack_mg(PSQT[placedPiece][tableTo]);
+        evalState.eg[movingColor] += PieceValueEG[placedPiece] + unpack_eg(PSQT[placedPiece][tableTo]);
+        evalState.phase += game_phase_increment[placedPiece];
+#endif
 
         if (flags == KingCastle || flags == QueenCastle) {
             int rF, rT;
@@ -178,10 +187,12 @@ bool Board::makeMove(Move move) {
             [[maybe_unused]] int tableRf = (movingColor == White) ? (rF ^ 56) : rF;
             [[maybe_unused]] int tableRt = (movingColor == White) ? (rT ^ 56) : rT;
 
-            
-            
-            
-            
+            #ifndef USE_NNUE
+            evalState.mg[movingColor] -= (PieceValueMG[Rook] + unpack_mg(PSQT[Rook][tableRf]));
+            evalState.eg[movingColor] -= (PieceValueEG[Rook] + unpack_eg(PSQT[Rook][tableRf]));
+            evalState.mg[movingColor] += (PieceValueMG[Rook] + unpack_mg(PSQT[Rook][tableRt]));
+            evalState.eg[movingColor] += (PieceValueEG[Rook] + unpack_eg(PSQT[Rook][tableRt]));
+#endif
 
             Bitboard::popBit(pieces[Rook], rF); Bitboard::popBit(occupancy[movingColor], rF);
             Bitboard::setBit(pieces[Rook], rT); Bitboard::setBit(occupancy[movingColor], rT);
@@ -195,8 +206,21 @@ bool Board::makeMove(Move move) {
         else halfMoveClock++;
 
         enPassantSq = SqNone;
-        if (piece == Pawn && flags == DoublePawnPush)
-            enPassantSq = (movingColor == White) ? from + 8 : from - 8;
+        if (piece == Pawn && flags == DoublePawnPush) {
+            int epSq = (movingColor == White) ? from + 8 : from - 8;
+            int enemyColor = 1 - movingColor;
+            uint64_t enemyPawns = getPieces(Pawn, enemyColor);
+            int epRank = (movingColor == White) ? 4 : 3;
+            int epFile = to % 8;
+            
+            bool canCapture = false;
+            if (epFile > 0 && (enemyPawns & (1ULL << (epRank * 8 + epFile - 1)))) canCapture = true;
+            if (epFile < 7 && (enemyPawns & (1ULL << (epRank * 8 + epFile + 1)))) canCapture = true;
+            
+            if (canCapture) {
+                enPassantSq = epSq;
+            }
+        }
 
         if (piece == King)
             castlingRights &= (movingColor == White)

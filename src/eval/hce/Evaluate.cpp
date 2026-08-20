@@ -1,7 +1,7 @@
 #include "eval/hce/Evaluate.hpp"
 #include "core/Bitboard.hpp"
 #include "core/Board.hpp"
-#include "search/hce/PawnTable.hpp"
+#include "search/PawnTable.hpp"
 
 
 

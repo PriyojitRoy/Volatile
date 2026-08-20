@@ -11,11 +11,7 @@
 #include "core/Move.hpp"
 
 // Include the appropriate search backend
-#ifdef USE_NNUE
-#include "search/nnue/MCTS.hpp"
-#else
-#include "search/hce/Search.hpp"
-#endif
+#include "search/Search.hpp"
 
 namespace VEngine {
 
@@ -36,13 +32,7 @@ namespace VEngine {
         Board board;
         std::thread searchThread;
         bool isRunning;
-
-#ifdef USE_NNUE
-        MCTS searcher;
-#else
         Search searcher;
-#endif
-
     private:
         std::unordered_map<std::string, Command> commands;
         void registerCommands();

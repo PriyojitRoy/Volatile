@@ -1,6 +1,6 @@
 #include "uci/commands/Commands.hpp"
 #include "uci/UCIHandler.hpp"
-#include "search/hce/TimeManager.hpp"
+#include "search/TimeManager.hpp"
 #include <iostream>
 
 namespace VEngine {

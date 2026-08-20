@@ -2,7 +2,7 @@
 #include "core/Bitboard.hpp"
 #include "core/Constants.hpp"
 #include "search/TT.hpp"
-#include "search/hce/TimeManager.hpp"
+#include "search/TimeManager.hpp"
 #include "search/Tablebase.hpp"
 #include "core/MoveGen.hpp"
 #include "core/Move.hpp"

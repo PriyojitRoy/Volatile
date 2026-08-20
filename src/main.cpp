@@ -2,7 +2,7 @@
 #include "core/Board.hpp"
 #include "search/TT.hpp"
 #include "search/OpeningBook.hpp"
-#include "search/hce/Datagen.hpp"
+#include "search/Datagen.hpp"
 
 int main(int argc, char* argv[]) {
     VEngine::Board board;

@@ -1,5 +1,5 @@
-#include "search/hce/Datagen.hpp"
-#include "search/hce/Search.hpp"
+#include "search/Datagen.hpp"
+#include "search/Search.hpp"
 #include "core/MoveGen.hpp"
 #include <sys/wait.h>
 #include <unistd.h>

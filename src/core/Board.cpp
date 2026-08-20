@@ -2,6 +2,7 @@
 #include "core/Constants.hpp"
 #include "core/Move.hpp"
 #include "core/Bitboard.hpp"
+#include "eval/hce/Evaluate.hpp"
 #include "eval/nnue/Network.hpp"
 //#define DEBUG_HASH
 namespace VEngine {
@@ -41,7 +42,7 @@ void Board::initKeys() {
     Board::Board() {
         reset();
     }
-    void Board::reset() {
+void Board::reset() {
         for (int i = 0; i < 6; i++) pieces[i] = 0ULL;
         for (int i = 0; i < 3; i++) occupancy[i] = 0ULL;
         sideToMove = White;
@@ -50,11 +51,13 @@ void Board::initKeys() {
         halfMoveClock = 0;
         fullMoveNumber = 1;
         zorbitKey = 0;
-        
-        
-        
+        evalState.mg[White] = evalState.mg[Black] = 0;
+        evalState.eg[White] = evalState.eg[Black] = 0;
+        evalState.phase = 0;
         history.clear();
-        accumulator.init(Network::getBiases()); 
+        #ifdef USE_NNUE
+        accumulator.init(Network::getBiases());
+#endif 
         initKeys();
     }
 
@@ -181,9 +184,9 @@ void Board::parseFen(const std::string& fen) {
         fullMoveNumber = std::stoi(full);
         hashBoard();
         initKeys(); 
-        
-        
-        
+        evalState.mg[White] = evalState.mg[Black] = 0;
+        evalState.eg[White] = evalState.eg[Black] = 0;
+        evalState.phase = 0;
             
         for (int p = Pawn; p <= King; p++) {
             for (int c = White; c <= Black; c++) {
@@ -192,11 +195,13 @@ void Board::parseFen(const std::string& fen) {
                     int sq = Bitboard::getLsb(bb);
                     Bitboard::popLsb(bb);
                 
-                    [[maybe_unused]] int tableSq = (c == White) ? (sq ^ 56) : sq;
+                    #ifndef USE_NNUE
+                    int tableSq = (c == White) ? (sq ^ 56) : sq;
                 
-                    
-                    
-                    
+                    evalState.mg[c] += PieceValueMG[p] + unpack_mg(PSQT[p][tableSq]);
+                    evalState.eg[c] += PieceValueEG[p] + unpack_eg(PSQT[p][tableSq]);
+                    evalState.phase += game_phase_increment[p];
+#endif
                 }
             }
         }

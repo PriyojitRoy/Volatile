@@ -1,4 +1,4 @@
-#include "search/hce/Search.hpp"
+#include "search/Search.hpp"
 #include "core/MoveGen.hpp"
 #include "search/TT.hpp"
 #include "core/Bitboard.hpp"
