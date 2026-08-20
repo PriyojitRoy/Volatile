@@ -15,17 +15,31 @@ else()
 endif()
 
 # ==============================================================================
-# Architecture Optimizations
+# Architecture & Warning Optimizations
 # ==============================================================================
+set(GCC_CLANG_WARNINGS
+    -Wall
+    -Wextra
+    -Wno-unused-parameter
+    -Wno-unused-variable
+    -Wno-array-bounds
+)
+
+set(MSVC_WARNINGS
+    /W4
+    /wd4101 # unreferenced local variable
+    /wd4100 # unreferenced formal parameter
+)
+
 function(apply_hardware_optimizations target_name)
     if(MSVC)
-        target_compile_options(${target_name} PUBLIC /W4 /Ox /DNDEBUG)
+        target_compile_options(${target_name} PUBLIC ${MSVC_WARNINGS} /Ox /DNDEBUG)
         if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64" OR CMAKE_SYSTEM_PROCESSOR MATCHES "amd64")
             target_compile_options(${target_name} PUBLIC /arch:AVX2)
             message(STATUS "Detected x86_64 (MSVC) - Enabling /arch:AVX2")
         endif()
     else()
-        target_compile_options(${target_name} PUBLIC -Wall -Wextra -O3 -DNDEBUG)
+        target_compile_options(${target_name} PUBLIC ${GCC_CLANG_WARNINGS} -O3 -DNDEBUG)
         if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64" OR CMAKE_SYSTEM_PROCESSOR MATCHES "amd64")
             target_compile_options(${target_name} PUBLIC -march=native -mbmi2 -mavx2)
             message(STATUS "Detected x86_64 (GCC/Clang) - Enabling AVX2 and BMI2")
