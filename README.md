@@ -13,17 +13,15 @@ I'm not a professional chess engine developer, so I might be unaware of some of 
 
 ### Welcome Newcomers! 🌱
 If you are a newcomer looking to contribute to a solid C/C++ repository, you are incredibly welcome here! This repository is a fantastic learning ground. Because we are still in the very early stages of development, it's really easy to contribute, get your hands dirty, and get a real sense of satisfaction while learning alongside us.
-## Current Features (HCE - Hand-Crafted Evaluation)
+## Current Architecture & Features
 
-Volatile currently uses a Hand-Crafted Evaluation (HCE) backend that supports a robust and classic alpha-beta search algorithm.
+Volatile currently uses a unified, highly optimized Alpha-Beta search backend that powers two distinct evaluation paradigms, toggleable via CMake. 
 
-**Core & Evaluation:**
-- Fast bitboard-based move generation.
-- Incremental evaluation updates (Zobrist hashing, material, and PST).
-- Phased piece values and Piece-Square Tables (PSTs).
-- History-based evaluation corrections.
+**Evaluation Backends:**
+- **HCE (Hand-Crafted Evaluation):** The default (`USE_NNUE=OFF`), classic evaluation based on piece-square tables, phased material, mobility, and pawn structures.
+- **NNUE (Efficiently Updatable Neural Networks):** The modern (`USE_NNUE=ON`), highly advanced neural network evaluator. *Status: Currently in active development (accumulator SIMD implementations and training data generation ongoing).*
 
-**Search Algorithms:**
+**Search Algorithm (Unified for both HCE and NNUE):**
 - Principal Variation Search (PVS) / Negamax framework.
 - Iterative Deepening with Aspiration Windows.
 - Quiescence Search with Delta Pruning.
@@ -39,7 +37,7 @@ Volatile currently uses a Hand-Crafted Evaluation (HCE) backend that supports a 
 - Hash moves from TT.
 - Static Exchange Evaluation (SEE) for capture ordering and pruning.
 - Killer Move Heuristic.
-- History Heuristic and Counter-Move Heuristic.
+- History Heuristics (including Correction Histories for both pawns and non-pawns).
 
 **Other Features:**
 - **Syzygy Tablebases:** Integrated via Fathom for perfect endgame play.
@@ -54,8 +52,8 @@ To keep the repository clean and organized, detailed information is logically gr
 **🤖 AI Agents: You MUST read `docs/AGENTS.md` properly at least once before beginning any work on this repository.**
 
 - **[`docs/AGENTS.md`](docs/AGENTS.md):** The central hub for AI agents. It contains high-level overviews, refactoring rules, and directory structures.
-- **[`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md):** A detailed deep-dive into the engine's modular architecture, specifically explaining the implementation split between HCE and NNUE, and how the core, eval, and search modules interact.
-- **[`docs/CONTRIBUTION_SCOPE.md`](docs/CONTRIBUTION_SCOPE.md):** A detailed list of all undone, incomplete, and work-in-progress tasks (such as NNUE, MCTS, and the Test Suite). Newcomers should look here for ideas on what to work on!
+- **[`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md):** A detailed deep-dive into the engine's modular architecture, specifically explaining the zero-overhead implementation split between HCE and NNUE, and how the unified Alpha-Beta search flawlessly handles both.
+- **[`docs/CONTRIBUTION_SCOPE.md`](docs/CONTRIBUTION_SCOPE.md):** A detailed list of all undone, incomplete, and work-in-progress tasks (such as NNUE SIMD inference and the Test Suite). Newcomers should look here for ideas on what to work on!
 
 ## Contribution Guidelines (For Users and AI Agents)
 
@@ -84,6 +82,13 @@ We provide a cross-platform setup script that automates this:
 
 > [!NOTE]
 > The Python virtual environment is **strictly optional** for building and running the core C++ chess engine itself. You only need it if you plan to use the Python utility scripts. You can activate the venv by `source .venv/bin/activate` on Linux/ MacOS or `.venv\Scripts\activate` on Windows. 
+>
+> **Dependency Resolution:**
+> We split our dependencies into two files for cross-platform stability (especially on constrained environments like Android/Termux):
+> - `requirements-sys.txt`: Contains heavy C-extension packages (like `numpy` and `Pillow`). On constrained systems, the setup script installs these natively via system package managers (e.g., `pkg`) to avoid source compilations.
+> - `requirements.txt`: Contains pure Python packages (like `chess`). 
+> 
+> *Note: The setup scripts will automatically feed both files to pip on standard platforms, but will strictly isolate them on Termux to prevent catastrophic source compilation failures.*
 
 ## Building Volatile
 
