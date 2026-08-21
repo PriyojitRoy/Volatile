@@ -78,3 +78,38 @@ We welcome contributions of all sizes! To maintain a high-quality, maintainable,
    - Leave an empty line after the list.
    - End with a `Signed-off-by: Your Name <email@example.com>` signature block.
    - (Optional) Leave an empty line and add any closing/referencing issue tags (e.g., `Closes #7` or `Ref #2`).
+# Agent Instructions for SPRT Testing
+
+When performing search or evaluation enhancements, you **must** use the SPRT framework to prove the Elo gain before committing changes.
+
+## Testing Protocol
+If you are tweaking the search algorithms, here is the exact step-by-step workflow you should follow to prove your changes work:
+
+1. **The Baseline:** Compile the unmodified engine (exactly as it is on the `main` branch) inside a folder named `build_base/`.
+   ```bash
+   mkdir -p build_base && cd build_base
+   cmake ..
+   make -j
+   ```
+2. **The Modification:** Edit the code in `src/` to add your search optimizations.
+3. **The Test Engine:** Compile your new changes in the standard `build/` folder.
+   ```bash
+   mkdir -p build && cd build
+   cmake ..
+   make -j
+   ```
+4. **Configuration (Optional):** Open `tests/RunSPRT.cpp` and update the `runnerPath` if `fastchess` or `cutechess-cli` are in custom locations, or toggle `useFastChess` as appropriate.
+5. **The Test Build:** Create a dedicated folder for testing (which will automatically detect it should build the tests instead of the main engine):
+   ```bash
+   cd ..
+   mkdir build_tests && cd build_tests
+   cmake ..
+   make -j
+   ```
+6. **The Match:** From inside the `build_tests/` folder, run the SPRT match:
+   ```bash
+   ./run_sprt
+   ```
+
+The C++ code will automatically pit `../build_base/Volatile` against `../build/Volatile` using the standard `uho` opening book.
+Do **not** commit search enhancements without documenting a passed SPRT test.

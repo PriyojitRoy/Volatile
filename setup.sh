@@ -10,7 +10,7 @@ echo "====================================="
 # Volatile Setup Configuration
 # ==========================================
 REQUIRED_TOOLS=("cmake" "make")
-OPTIONAL_TOOLS=("fastchess" "cutechess-cli")
+# SPRT Testing Requirements
 VENV_DIR=".venv"
 
 # 1. Resolve Python (python3 vs python)
@@ -128,11 +128,15 @@ for tool in "${REQUIRED_TOOLS[@]}"; do
     check_tool "$tool" true
 done
 
-# Check Optional Tools
-for tool in "${OPTIONAL_TOOLS[@]}"; do
-    check_tool "$tool" false
-done
-
+# ==========================================
+# SPRT Testing Notice
+# ==========================================
+echo ""
+echo "[*] NOTE: If you plan to make changes to the search or evaluation logic,"
+echo "    SPRT verification is STRICTLY REQUIRED. To run SPRT tests, you must"
+echo "    have either \`fastchess\` or \`cutechess-cli\` installed on your system."
+echo "    Please see tests/RunSPRT.cpp for path configuration."
+echo ""
 # Setup Python Environment
 setup_venv "$PYTHON_CMD"
 

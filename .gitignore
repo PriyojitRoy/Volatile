@@ -3,3 +3,5 @@
 .venv/
 .vscode/
 build/
+build_base/
+build_tests/

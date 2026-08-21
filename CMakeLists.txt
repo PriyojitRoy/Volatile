@@ -84,9 +84,21 @@ endif()
 
 add_subdirectory(src)
 
+if(CMAKE_BINARY_DIR MATCHES "test")
+    option(BUILD_ENGINE "Build the main Volatile executable" OFF)
+    option(BUILD_TESTS "Build test executables" ON)
+    message(STATUS "Test directory detected - Defaulting to BUILD_TESTS=ON, BUILD_ENGINE=OFF")
+else()
+    option(BUILD_ENGINE "Build the main Volatile executable" ON)
+    option(BUILD_TESTS "Build test executables" OFF)
+    message(STATUS "Standard directory detected - Defaulting to BUILD_ENGINE=ON, BUILD_TESTS=OFF")
+endif()
+
 # 2. Main Executable (CLI/UCI Interface)
-add_executable(Volatile src/main.cpp)
-target_link_libraries(Volatile PRIVATE EngineLib)
+if(BUILD_ENGINE)
+    add_executable(Volatile src/main.cpp)
+    target_link_libraries(Volatile PRIVATE EngineLib)
+endif()
 
 # ==============================================================================
 # Testing Suite
@@ -99,5 +111,6 @@ macro(add_volatile_test TEST_NAME SOURCE_FILE)
     add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
 endmacro()
 
-add_volatile_test(test_board tests/TestBoard.cpp)
-add_volatile_test(test_movegen tests/TestMoveGen.cpp)
+if(BUILD_TESTS)
+    add_subdirectory(tests)
+endif()

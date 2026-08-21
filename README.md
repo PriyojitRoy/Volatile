@@ -114,3 +114,30 @@ make -j$(nproc)
 ./Volatile
 ```
 (You can then interact with the engine using the standard UCI protocol.)
+
+## Testing Framework
+Any change to search or evaluation logic **must** be validated via SPRT testing. We use a custom C++ test runner suite that wraps `fastchess` or `cutechess-cli`.
+
+### The Standard Contribution Workflow
+If you are tweaking the search algorithms, here is the exact step-by-step workflow you should follow to prove your changes work:
+
+1. **The Baseline:** Compile the unmodified engine (exactly as it is on the `main` branch) inside a folder named `build_base/`.
+2. **The Modification:** Get your hands dirty! Edit the code in `src/` to add your awesome new search optimization.
+3. **The Test Engine:** Compile your new changes in the standard `build/` folder.
+4. **Configuration (Optional):** Open `tests/RunSPRT.cpp` and update the `runnerPath` if you have `fastchess` or `cutechess-cli` installed in a custom location.
+5. **The Test Build:** Create a dedicated folder for testing (which will automatically detect it should build the tests):
+   ```bash
+   mkdir build_tests && cd build_tests
+   cmake ..
+   make -j$(nproc)
+   ```
+6. **The Match:** From inside the `build_tests/` folder, start the SPRT match:
+   ```bash
+   ./run_sprt
+   ```
+
+The C++ code will automatically point to `../build_base/Volatile` and `../build/Volatile`, run the match, and print the live Elo statistics to your screen. If the SPRT passes, you are safe to commit and push your changes! 🎉
+
+> [!NOTE]
+> For SPRT tests, you **must** have either `fastchess` or `cutechess-cli` installed system-wide.
+> You can toggle which one is used by changing the `useFastChess` boolean variable inside `tests/RunSPRT.cpp`.

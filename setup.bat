@@ -44,11 +44,15 @@ for %%T in (%REQUIRED_TOOLS%) do (
     call :CheckTool %%T true
 )
 
-:: Check Optional Tools
-for %%T in (%OPTIONAL_TOOLS%) do (
-    call :CheckTool %%T false
-)
-
+:: ==========================================
+:: SPRT Testing Notice
+:: ==========================================
+echo.
+echo [*] NOTE: If you plan to make changes to the search or evaluation logic,
+echo     SPRT verification is STRICTLY REQUIRED. To run SPRT tests, you must
+echo     have either fastchess or cutechess-cli installed on your system.
+echo     Please see tests\RunSPRT.cpp for path configuration.
+echo.
 :: Setup Virtual Environment
 call :SetupVenv
 
