@@ -233,7 +233,7 @@ bool Board::makeMove(Move move) {
             int epSq = (movingColor == White) ? from + 8 : from - 8;
             int enemyColor = 1 - movingColor;
             uint64_t enemyPawns = getPieces(Pawn, enemyColor);
-            int epRank = (movingColor == White) ? 4 : 3;
+            int epRank = (movingColor == White) ? 3 : 4;
             int epFile = to % 8;
             
             bool canCapture = false;
