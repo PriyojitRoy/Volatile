@@ -12,10 +12,11 @@ namespace VEngine { using EvalBackend = Evaluate; }
 namespace VEngine {
 
     extern Move killers[MAX_PLY][2]; 
-    extern int history[2][64][64]; 
+    extern int history[2][64][64];
+    extern int captureHistory[6][6][64];
     extern Move counterMoves[12][64];
     extern Move plyMoves[MAX_PLY];
-    extern int contHistory[64][64][64][64];
+    extern int contHistory[6][64][6][64];
     extern int pawnCorrHist[2][16384];
     extern int nonPawnCorrHist[2][16384];
     extern int minorCorrHist[2][16384];
@@ -111,6 +112,7 @@ namespace VEngine {
                     } else {
                         score = BASE_CAPTURE_SCORE + (vVal * VICTIM_VALUE_MULTIPLIER) - aVal;
                     }
+                    if (attacker != None && victim != None) score += captureHistory[attacker][victim][m.getTo()] / 16;
                 }
             } 
             else {
@@ -120,7 +122,9 @@ namespace VEngine {
                     score = history[board.sideToMove][m.getFrom()][m.getTo()];
                     Move prevM = (ss - 1)->currentMove;
                     if (prevM.getData() != 0) {
-                        score += contHistory[prevM.getFrom()][prevM.getTo()][m.getFrom()][m.getTo()];
+                        int prevPiece = (ss - 1)->movedPieceIndex;
+                        int curPiece = board.getPieceAt(m.getFrom());
+                        score += contHistory[prevPiece][prevM.getTo()][curPiece][m.getTo()];
                         if (ply > 0 && plyMoves[ply - 1].getData() != 0) {
                             int prevPiece = board.getPieceAt(plyMoves[ply - 1].getTo());
                             if (prevPiece != None && counterMoves[prevPiece][plyMoves[ply - 1].getTo()] == m) {

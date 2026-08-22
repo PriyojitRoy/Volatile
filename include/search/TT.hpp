@@ -7,13 +7,13 @@ namespace VEngine {
 
     enum TTNodeFlag { TT_EXACT, TT_LOWERBOUND, TT_UPPERBOUND };
 
-    struct TTEntry {
+    struct alignas(16) TTEntry {
         uint64_t key;
         Move move;
-        float value;
-        int depth;
-        TTNodeFlag flag;
-        uint16_t age;
+        int16_t value;
+        int16_t depth;
+        uint8_t flag;
+        uint8_t age;
     };
 
     class TranspositionTable {

@@ -97,6 +97,8 @@ namespace VEngine {
         Move excludedMove;
         int staticEval = 0;
         int reduction = 0;
+        int movedPieceIndex = 0;
+        int capturedPieceIndex = 0;
     };
 
 void getCorrHistKeys(const Board& board, int& pawnK, int& nonPawnK, int& minorK, int& majorK);

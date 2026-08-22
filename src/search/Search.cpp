@@ -20,10 +20,11 @@ namespace VEngine {
 
     static double LMRTable[MAX_PLY][MAX_PLY];
     Move killers[MAX_PLY][2]; 
-    int history[2][64][64]; 
+    int history[2][64][64];
+    int captureHistory[6][6][64];
     Move counterMoves[12][64];
     Move plyMoves[MAX_PLY];
-    int contHistory[64][64][64][64];
+    int contHistory[6][64][6][64];
     static int failHighCount[MAX_PLY+10];
     int pawnCorrHist[2][16384];
     int nonPawnCorrHist[2][16384];
@@ -56,6 +57,7 @@ namespace VEngine {
     Search::Search() : stopSearch(false), isPondering(false), nodesSearched(0), allocatedTime(0) {
         std::memset(killers, 0, sizeof(killers));
         std::memset(history, 0, sizeof(history));
+        std::memset(captureHistory, 0, sizeof(captureHistory));
         std::memset(contHistory, 0, sizeof(contHistory));
         std::memset(pawnCorrHist, 0, sizeof(pawnCorrHist));
         std::memset(nonPawnCorrHist, 0, sizeof(nonPawnCorrHist));
@@ -439,10 +441,20 @@ namespace VEngine {
         for (int i = 0; i < moves.size(); i++) {
             Move m = moves.moves[i];
             if (m.getData() == ss->excludedMove.getData()) continue;
+            ss->movedPieceIndex = board.getPieceAt(m.getFrom());
+            ss->capturedPieceIndex = board.getPieceAt(m.getTo());
+            
+            
             Move prevM = (ss - 1)->currentMove;
-            int contScore = (prevM.getData() != 0) ? contHistory[prevM.getFrom()][prevM.getTo()][m.getFrom()][m.getTo()] : 0;
-            int histScore = history[board.sideToMove][m.getFrom()][m.getTo()] + contScore;
             bool isQuiet = (m.getFlags() < FLAG_CAPTURE_MIN);
+            int histScore = 0;
+            if (isQuiet) {
+                histScore = history[board.sideToMove][m.getFrom()][m.getTo()];
+                if (prevM.getData() != 0) {
+                    int prevPiece = (ss - 1)->movedPieceIndex;
+                    histScore += contHistory[prevPiece][prevM.getTo()][ss->movedPieceIndex][m.getTo()];
+                }
+            }
             bool isHash = (m.getData() == hashMove.getData() && hashMove.getData() != 0);
 
             bool isBadCapture = (!isQuiet && !isHash && see(board, m) < 0);
@@ -462,7 +474,7 @@ namespace VEngine {
 
             if (depth <= FUTILITY_MIN_DEPTH && !inCheck && !isPV && isQuiet && std::abs(alpha) < SCORE_MATE_BOUND) {
                 bool isKiller = (killers[ply][0] == m || killers[ply][1] == m);
-                bool isAdvancedPawn = (board.getPieceAt(m.getFrom()) == Pawn && (m.getTo() >= 48 || m.getTo() <= 15));
+                bool isAdvancedPawn = (ss->movedPieceIndex == Pawn && (m.getTo() >= 48 || m.getTo() <= 15));
                 bool hasGreatHistory = (histScore > GREAT_HISTORY_SCORE); 
 
                 if (!isHash && !isKiller && !isAdvancedPawn && !hasGreatHistory) {
@@ -512,7 +524,15 @@ namespace VEngine {
                     if (failHighCount[ply + 1] > 2) reduction++;
                     if (killers[ply][0] == m || killers[ply][1] == m) reduction--;
                     
-                    if (isBadCapture) reduction++; 
+                    if (isBadCapture) {
+                        int attacker = ss->movedPieceIndex;
+                        int victim = ss->capturedPieceIndex;
+                        if (attacker != None && victim != None) {
+                            if (captureHistory[attacker][victim][m.getTo()] < 0) reduction++;
+                            else if (captureHistory[attacker][victim][m.getTo()] > GREAT_HISTORY_SCORE) reduction--;
+                        }
+                        reduction++;
+                    } 
 
                     reduction = std::clamp(reduction, 0, depth - 2);
                 }
@@ -536,25 +556,26 @@ namespace VEngine {
                     alpha = score;
                     if (alpha >= beta) { 
                         failHighCount[ply]++;
+                        int bonus = depth * depth;
                         if (isQuiet) {
                             killers[ply][1] = killers[ply][0];
                             killers[ply][0] = m;
                             
-                            int bonus = depth * depth;
                             updateHistory(history[board.sideToMove][m.getFrom()][m.getTo()], bonus);
-                            
+                            updateHistory(history[board.sideToMove][m.getFrom()][m.getTo()], bonus);
                             Move prevM2 = (ss - 1)->currentMove;
                             if (prevM2.getData() != 0) {
-                                updateHistory(contHistory[prevM2.getFrom()][prevM2.getTo()][m.getFrom()][m.getTo()], bonus);
+                                int prevPiece2 = (ss - 1)->movedPieceIndex;
+                                updateHistory(contHistory[prevPiece2][prevM2.getTo()][ss->movedPieceIndex][m.getTo()], bonus);
                             }
                             
                             for (int idx = 0; idx < quietCount; idx++) {
                                 Move quietMove = quietsSearched[idx];
                                 if (quietMove.getData() != m.getData()) {
                                     updateHistory(history[board.sideToMove][quietMove.getFrom()][quietMove.getTo()], -bonus);
-                                    
                                     if (prevM2.getData() != 0) {
-                                        updateHistory(contHistory[prevM2.getFrom()][prevM2.getTo()][quietMove.getFrom()][quietMove.getTo()], -bonus);
+                                        int prevPiece2 = (ss - 1)->movedPieceIndex;
+                                        updateHistory(contHistory[prevPiece2][prevM2.getTo()][board.getPieceAt(quietMove.getFrom())][quietMove.getTo()], -bonus);
                                     }
                                 }
                             }
@@ -563,6 +584,10 @@ namespace VEngine {
                                 if (prevPiece != None) { counterMoves[prevPiece][plyMoves[ply - 1].getTo()] = m;
                                     
                                 }
+                            }
+                        } else {
+                            if (ss->movedPieceIndex != None && ss->capturedPieceIndex != None) {
+                                updateHistory(captureHistory[ss->movedPieceIndex][ss->capturedPieceIndex][m.getTo()], bonus);
                             }
                         }
                         break; 

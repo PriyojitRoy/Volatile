@@ -17,11 +17,11 @@ struct SPRTConfig {
     std::string baseEnginePath = "../build_base/Volatile";  // The unmodified baseline engine
     
     // Testing Framework Selection
-    bool useFastChess = true;                             // Set to true to use 'fastchess', false to use 'cutechess-cli'
-    std::string runnerPath = "fastchess";// E.g. "fastchess", "cutechess-cli", or absolute paths
+    bool useFastChess = true;                                                     // Set to true to use fastchess, false to use cutechess
+    std::string runnerPath = "fastchess";                                         // Set the path to the cutechess/fastchess executable
     
     // Opening Book (Using the local UHO dataset)
-    std::string openingBook = "../uho/UHO_2024/UHO_2024_+090_+099/UHO_2024_8mvs_+090_+099.epd";
+    std::string openingBook = "../uho/Lichess/UHO_Lichess_4852_v1.epd.part_aa";
     
     // Match Parameters
     std::string timeControl = "10+0.1";
@@ -84,6 +84,16 @@ int main(int argc, char* argv[]) {
     }
 
     // 3. Validate Opening Book
+    if (!fileExists(config.openingBook)) {
+        // Try to reconstruct from parts if they exist
+        std::string partsCheck = "ls " + config.openingBook + ".part_* > /dev/null 2>&1";
+        if (std::system(partsCheck.c_str()) == 0) {
+            std::cout << "[INFO] Reconstructing opening book from parts..." << std::endl;
+            std::string concatCmd = "cat " + config.openingBook + ".part_* > " + config.openingBook;
+            std::system(concatCmd.c_str());
+        }
+    }
+
     if (!fileExists(config.openingBook)) {
         std::cerr << "[ERROR] Opening book not found at: " << fs::absolute(config.openingBook) << std::endl;
         return 1;
