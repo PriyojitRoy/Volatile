@@ -15,6 +15,7 @@ namespace VEngine {
         
         uint64_t pieces[6]; 
         uint64_t occupancy[3]; 
+        int mailbox[64]; 
         
         int sideToMove;
         int enPassantSq;
@@ -53,7 +54,7 @@ namespace VEngine {
             return occupancy[Both];
         }
         
-        int getPieceAt(int sq) const;
+        inline int getPieceAt(int sq) const { return mailbox[sq]; }
         uint64_t getAttackers(int sq, uint64_t occ) const {
             uint64_t attackers = 0;
             

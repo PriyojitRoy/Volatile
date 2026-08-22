@@ -45,6 +45,7 @@ void Board::initKeys() {
 void Board::reset() {
         for (int i = 0; i < 6; i++) pieces[i] = 0ULL;
         for (int i = 0; i < 3; i++) occupancy[i] = 0ULL;
+        for (int i = 0; i < 64; i++) mailbox[i] = None;
         sideToMove = White;
         enPassantSq = SqNone;
         castlingRights = 0;
@@ -162,6 +163,7 @@ void Board::parseFen(const std::string& fen) {
                 int p = (type == 'p') ? Pawn : (type == 'n') ? Knight : (type == 'b') ? Bishop : (type == 'r') ? Rook : (type == 'q') ? Queen : King;
                 Bitboard::setBit(pieces[p], sq);
                 Bitboard::setBit(occupancy[color], sq);
+                mailbox[sq] = p;
                 f++;
             }
         }

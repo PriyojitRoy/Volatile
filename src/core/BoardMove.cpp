@@ -132,6 +132,7 @@ bool Board::makeMove(Move move) {
 
             Bitboard::popBit(pieces[Pawn], capSq);
             Bitboard::popBit(occupancy[capColor], capSq);
+            mailbox[capSq] = None;
 
             zorbitKey ^= ZOBRIST_PIECES[Pawn][capColor][capSq];
             pawnKey   ^= ZOBRIST_PIECES[Pawn][capColor][capSq];
@@ -174,6 +175,8 @@ bool Board::makeMove(Move move) {
 
         Bitboard::setBit(pieces[placedPiece], to);
         Bitboard::setBit(occupancy[movingColor], to);
+        mailbox[from] = None;
+        mailbox[to] = placedPiece;
 
         zorbitKey ^= ZOBRIST_PIECES[placedPiece][movingColor][to];
         if (placedPiece == Pawn) {
@@ -219,6 +222,8 @@ bool Board::makeMove(Move move) {
 
             Bitboard::popBit(pieces[Rook], rF); Bitboard::popBit(occupancy[movingColor], rF);
             Bitboard::setBit(pieces[Rook], rT); Bitboard::setBit(occupancy[movingColor], rT);
+            mailbox[rF] = None;
+            mailbox[rT] = Rook;
 
             uint64_t rookXor = ZOBRIST_PIECES[Rook][movingColor][rF] ^ ZOBRIST_PIECES[Rook][movingColor][rT];
             zorbitKey ^= rookXor;
@@ -320,6 +325,8 @@ void Board::unmakeMove(Move move) {
 
         Bitboard::setBit(pieces[state.movedPiece], from);
         Bitboard::setBit(occupancy[sideToMove], from);
+        mailbox[to] = None;
+        mailbox[from] = state.movedPiece;
 
         if (state.capturedPiece != None) {
             int capSq = to;
@@ -328,6 +335,7 @@ void Board::unmakeMove(Move move) {
 
             Bitboard::setBit(pieces[state.capturedPiece], capSq);
             Bitboard::setBit(occupancy[1 - sideToMove], capSq);
+            mailbox[capSq] = state.capturedPiece;
         }
 
         if (flags == KingCastle) {
@@ -335,12 +343,16 @@ void Board::unmakeMove(Move move) {
             int rT = (sideToMove == White) ? SqF1 : SqF8;
             Bitboard::popBit(pieces[Rook], rT); Bitboard::popBit(occupancy[sideToMove], rT);
             Bitboard::setBit(pieces[Rook], rF); Bitboard::setBit(occupancy[sideToMove], rF);
+            mailbox[rT] = None;
+            mailbox[rF] = Rook;
         }
         else if (flags == QueenCastle) {
             int rF = (sideToMove == White) ? SqA1 : SqA8;
             int rT = (sideToMove == White) ? SqD1 : SqD8;
             Bitboard::popBit(pieces[Rook], rT); Bitboard::popBit(occupancy[sideToMove], rT);
             Bitboard::setBit(pieces[Rook], rF); Bitboard::setBit(occupancy[sideToMove], rF);
+            mailbox[rT] = None;
+            mailbox[rF] = Rook;
         }
 
         occupancy[Both] = occupancy[White] | occupancy[Black];

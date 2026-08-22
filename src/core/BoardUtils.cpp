@@ -57,11 +57,7 @@ bool Board::isSquareAttacked(int sq, int attackerSide) const {
         return false;
     }
 
-int Board::getPieceAt(int sq) const {
-        if (!Bitboard::getBit(occupancy[Both], sq)) return None;
-        for (int i = 0; i < 6; i++) if (Bitboard::getBit(pieces[i], sq)) return i;
-        return None;
-    }
+
 
 int Board::getKingSquare(int color) const {
         uint64_t kingBB = pieces[King] & occupancy[color];
