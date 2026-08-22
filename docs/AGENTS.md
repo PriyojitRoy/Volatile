@@ -98,7 +98,7 @@ If you are tweaking the search algorithms, here is the exact step-by-step workfl
    cmake ..
    make -j
    ```
-4. **Configuration (Optional):** Open `tests/RunSPRT.cpp` and update the `runnerPath` if `fastchess` or `cutechess-cli` are in custom locations, or toggle `useFastChess` as appropriate.
+4. **Configuration:** Open `tests/RunSPRT.cpp` and update the `runnerPath` to `fastchess` or `cutechess` locations, and toggle `useFastChess` as appropriate.
 5. **The Test Build:** Create a dedicated folder for testing (which will automatically detect it should build the tests instead of the main engine):
    ```bash
    cd ..
@@ -113,3 +113,6 @@ If you are tweaking the search algorithms, here is the exact step-by-step workfl
 
 The C++ code will automatically pit `../build_base/Volatile` against `../build/Volatile` using the standard `uho` opening book.
 Do **not** commit search enhancements without documenting a passed SPRT test.
+
+> [!IMPORTANT]
+> **Mandatory Commit Formatting:** Any SPRT testing output (the exact block printed when the hypothesis is accepted) **must** be strictly pasted into the commit message, right after the sign-off. This rule must be followed for any change or fix touching critical portions of the engine (e.g., search or evaluation).

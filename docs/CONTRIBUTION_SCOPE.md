@@ -50,3 +50,13 @@ Currently, our `data/books` directory doesn't have many `.bin` files. If you can
 **Status:** Poor / Needs Work
 
 The overall documentation across the repository is currently very poor. We are looking for infrastructure updates to add tools like **Doxygen**, **GraphViz** (for generating architecture diagrams), and code formatters (like `clang-format`) to help keep the codebase readable, standardized, and well-documented.
+
+## 9. OpenBench Integration & Distributed Testing
+**Status:** Planned / Needs Setup
+
+To rapidly accelerate our Elo gains, we eventually need to set up OpenBench and create dedicated documentation pages for it. This will allow community contributors to easily donate CPU time, run distributed SPRT tests, and submit verified patches directly to the engine.
+
+## 10. SPRT Testing & Commit Rules
+**Status:** Enforced
+
+Any commit containing search or evaluation fixes/improvements **must** be SPRT approved. The exact output block printed by FastChess/CuteChess when the hypothesis is accepted must be strictly pasted into the commit message, right after the sign-off line. This rule must be followed if the change or fix is in the critical portions of the engine.

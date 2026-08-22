@@ -23,6 +23,7 @@ This module defines the rules and state of chess.
 - **`Move.hpp / .cpp`**: Move encoding/decoding (typically using bitfields for from-square, to-square, promotion piece, and special flags like castling/en-passant).
 - **`MoveGen.hpp / .cpp`**: Generates pseudo-legal and legal moves. Often leverages magic bitboards for sliding pieces.
 - **`Board.hpp`**: The central state of the game. Contains bitboards for pieces, castling rights, en-passant square, and half-move clocks.
+  - *Mailbox Array:* Includes an $O(1)$ `int mailbox[64]` array that stays perfectly synchronized with the bitboards. It completely bypasses slow bitboard loops when identifying pieces during move execution and heuristic sorting.
   - *Unified Implementation:* The `Board` implementation uses zero-overhead C++ macro abstractions (`#ifndef USE_NNUE`) to bypass HCE-specific incremental updates when compiling for NNUE. This allows a single, unified `BoardMove.cpp` to efficiently support both evaluation backends without duplicated logic.
 
 ### 2.2 Evaluation (`eval/`)
@@ -42,8 +43,8 @@ The search module handles exploring the game tree to find the best move.
 
 - **`Search.hpp / .cpp`**: The main Principal Variation Search (PVS) and Negamax framework. This search acts as the universal engine core for both HCE and NNUE.
   - **`Quiescence.cpp`**: Resolves tactical volatility at the leaf nodes (captures and promotions) to avoid the horizon effect.
-  - **`MoveOrdering.cpp`**: Crucial for alpha-beta efficiency. Implements Hash moves, SEE, Killer Moves, and History Heuristics (including Correction Histories for both pawns and non-pawns, which natively apply to NNUE evaluations as well).
-  - **`TT.hpp / .cpp`**: Transposition Table with lockless hashing for caching exact scores and alpha/beta bounds.
+  - **`MoveOrdering.cpp`**: Crucial for alpha-beta efficiency. Implements Hash moves, SEE, Killer Moves, and History Heuristics. Features highly CPU cache-efficient $O(1)$ Mailbox-indexed arrays for Capture History (6x6x64) and 2-Ply Continuation History (6x64x6x64, ~1.1MB).
+  - **`TT.hpp / .cpp`**: Transposition Table with lockless hashing, aggressively utilizing 16-byte struct compression for double capacity and `__builtin_prefetch` instructions to mask memory latency.
   - **Pruning Techniques:** Null Move Pruning (NMP), Late Move Reductions (LMR), Reverse Futility Pruning (RFP), and ProbCut.
 
 ### 2.4 UCI (`uci/`)

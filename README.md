@@ -116,7 +116,7 @@ make -j$(nproc)
 (You can then interact with the engine using the standard UCI protocol.)
 
 ## Testing Framework
-Any change to search or evaluation logic **must** be validated via SPRT testing. We use a custom C++ test runner suite that wraps `fastchess` or `cutechess-cli`.
+Any change to search or evaluation logic **must** be validated via SPRT testing. We use a custom C++ test runner suite that wraps `fastchess` or `cutechess`.
 
 ### The Standard Contribution Workflow
 If you are tweaking the search algorithms, here is the exact step-by-step workflow you should follow to prove your changes work:
@@ -124,7 +124,7 @@ If you are tweaking the search algorithms, here is the exact step-by-step workfl
 1. **The Baseline:** Compile the unmodified engine (exactly as it is on the `main` branch) inside a folder named `build_base/`.
 2. **The Modification:** Get your hands dirty! Edit the code in `src/` to add your awesome new search optimization.
 3. **The Test Engine:** Compile your new changes in the standard `build/` folder.
-4. **Configuration (Optional):** Open `tests/RunSPRT.cpp` and update the `runnerPath` if you have `fastchess` or `cutechess-cli` installed in a custom location.
+4. **Configuration (Optional):** Open `tests/RunSPRT.cpp` and update the `runnerPath` if you have `fastchess` or `cutechess` installed in a custom location.
 5. **The Test Build:** Create a dedicated folder for testing (which will automatically detect it should build the tests):
    ```bash
    mkdir build_tests && cd build_tests
@@ -138,6 +138,9 @@ If you are tweaking the search algorithms, here is the exact step-by-step workfl
 
 The C++ code will automatically point to `../build_base/Volatile` and `../build/Volatile`, run the match, and print the live Elo statistics to your screen. If the SPRT passes, you are safe to commit and push your changes! 🎉
 
+> [!IMPORTANT]
+> **Mandatory Commit Formatting:** Any SPRT testing output (the exact block printed when the hypothesis is accepted) **must** be strictly pasted into the commit message, right after the sign-off. This rule must be followed for any change or fix touching critical portions of the engine (e.g., search or evaluation).
+
 > [!NOTE]
-> For SPRT tests, you **must** have either `fastchess` or `cutechess-cli` installed system-wide.
-> You can toggle which one is used by changing the `useFastChess` boolean variable inside `tests/RunSPRT.cpp`.
+> For SPRT tests, you **must** have either `fastchess` or `cutechess` installed.
+> You can toggle which one is used by changing the `useFastChess` boolean variable inside `tests/RunSPRT.cpp` and set the path to the respective tool by changing the `runnerPath`. 
